@@ -26,9 +26,9 @@
         "LOG_CHANNEL": "stderr",
         "SESSION_DRIVER": "cookie",
         "DB_CONNECTION": "mysql",
-        "DB_HOST": "4gg.h.filess.io",
-        "DB_PORT": "3306",
-        "DB_DATABASE": "db_sukun",
-        "DB_USERNAME": "root"
+        "DB_HOST": "z3kwt.h.filess.io",
+        "DB_PORT": "3307",
+        "DB_DATABASE": "dbsukuninventaris_oughtshade",
+        "DB_USERNAME": "dbsukuninventaris_oughtshade"
     }
 }
