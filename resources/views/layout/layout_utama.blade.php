@@ -248,7 +248,7 @@
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Profil Pengguna</h6>
         </li>
         <!-- Nama Pengguna (Diklik untuk Tampilkan Logout) -->
-        <li class="nav-item hide-mobile-invert"">
+        <li class="nav-item hide-mobile-invert">
           <a class="nav-link d-flex align-items-center" data-bs-toggle="collapse" href="#menuUser" role="button" aria-expanded="false" aria-controls="menuUser">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="bi bi-person text-dark text-sm opacity-10"></i> <!-- Ikon Pengguna -->
@@ -551,26 +551,26 @@
     });
 
     document.addEventListener("DOMContentLoaded", function () {
-        document.body.addEventListener("click", function (event) {
-            if (event.target.id === "logoutButton" || event.target.closest("#logoutButton")) {
-                event.preventDefault(); // Mencegah logout langsung
-                
-                Swal.fire({
-                    title: "Konfirmasi Logout",
-                    text: "Apakah Anda yakin ingin logout?",
-                    icon: "question",
-                    showCancelButton: true,
-                    confirmButtonColor: "#d33",
-                    cancelButtonColor: "#3085d6",
-                    confirmButtonText: "Ya, Logout!",
-                    cancelButtonText: "Batal"
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        window.location.href = event.target.closest("#logoutButton").href; // Redirect jika dikonfirmasi
-                    }
-                });
-            }
-        });
+      document.body.addEventListener("click", function (event) {
+        if (event.target.id === "logoutButton" || event.target.closest("#logoutButton")) {
+            event.preventDefault(); // Mencegah logout langsung
+            
+            Swal.fire({
+                title: "Konfirmasi Logout",
+                text: "Apakah Anda yakin ingin logout?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Ya, Logout!",
+                cancelButtonText: "Batal"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById("logoutForm").submit(); // Kirim form logout
+                }
+            });
+        }
+    });
 
         let activeMenu = document.querySelector(".nav-link.active");
         let sidebarContainer = document.querySelector("#sidenav-collapse-main");

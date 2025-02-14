@@ -98,7 +98,7 @@ Route::group(['middleware' => ['role:superadmin|admin|user']], function () {
     //master user
     Route::get('/dashboard', [UserController::class, 'dashboard'])->name('dashboard');
     Route::get('/profile', [UserController::class, 'logout'])->name('profile');
-    Route::get('/logout', [UserController::class, 'logout'])->name('logout');
+    Route::post('/logout', [UserController::class, 'logout'])->name('logout');
 
     //master peminjaman
     Route::get('/peminjaman', [PeminjamanController::class, 'index'])->name('peminjaman');
