@@ -50,7 +50,7 @@ class MasterBarangController extends Controller
                 ->rawColumns(['keterangan', 'aksi']) // Pastikan kolom tombol ditampilkan sebagai HTML
                 ->make(true);
         }
-
+        
         return view('master_barang.index');
     }
 
