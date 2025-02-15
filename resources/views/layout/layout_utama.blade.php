@@ -424,7 +424,7 @@
 
   <main class="main-content position-relative border-radius-lg ">
     <!-- Navbar -->
-    <nav class="navbar navbar-main navbar-expand-lg position-sticky top-0 px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="false">
+    <nav class="navbar navbar-main navbar-expand-lg top-0 px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur" data-scroll="false">
       <div class="container-fluid py-1 px-3">
         <div class="d-flex justify-content-between align-items-center w-100">
           <!-- Left side with breadcrumb -->
