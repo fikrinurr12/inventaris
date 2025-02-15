@@ -20,5 +20,8 @@
 
     <script src="{{secure_asset('assets/js/core/popper.min.js')}}"></script>
     <script src="{{secure_asset('assets/js/core/bootstrap.min.js')}}"></script>
+
+    <script src="{{asset('assets/js/core/popper.min.js')}}"></script>
+    <script src="{{asset('assets/js/core/bootstrap.min.js')}}"></script>
 </body>
 </html>
