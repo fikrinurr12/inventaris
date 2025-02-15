@@ -487,7 +487,7 @@
       </div>
     </nav>
 
-    <script async defer src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/autoNumeric/1.9.46/autoNumeric.min.js"></script>
 
     @stack('scripts_js')
@@ -653,7 +653,7 @@
   {{-- notifikasi pending --}}
 
   <!-- Github buttons -->
-  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <script src="https://buttons.github.io/buttons.js"></script>
 
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
   @php
