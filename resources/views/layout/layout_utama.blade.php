@@ -589,33 +589,7 @@
                 }
             });
         }
-    });
-
-        let activeMenu = document.querySelector(".nav-link.active");
-        let sidebarContainer = document.querySelector("#sidenav-collapse-main");
-
-        if (activeMenu && sidebarContainer) {
-            setTimeout(() => {
-                sidebarContainer.scrollTop = activeMenu.offsetTop - 50; // Scroll manual
-                if (typeof Scrollbar !== 'undefined') {
-                    let scrollbar = Scrollbar.get(sidebarContainer);
-                    if (scrollbar) {
-                        scrollbar.scrollTo(0, activeMenu.offsetTop - 50, 500); // Scroll smooth
-                    }
-                }
-            }, 300);
-        }
-    });
-    
-    window.addEventListener("load", function () {
-        let activeMenu = document.querySelector(".nav-link.active");
-        let sidebarContainer = document.querySelector("#sidenav-collapse-main");
-
-        if (activeMenu && sidebarContainer) {
-            setTimeout(() => {
-                sidebarContainer.scrollTop = activeMenu.offsetTop - 50;
-            }, 500); // Tambah delay agar sidebar benar-benar siap
-        }
+      });
     });
   </script>
 
