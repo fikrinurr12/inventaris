@@ -45,7 +45,7 @@
                  'rt' + 
                  '<"row mt-3 d-flex align-items-center"<"col-md-6"i><"col-md-6 text-end"p>>',
             lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]], // Opsi pilihan jumlah data
-            ajax: "{{ route('kategori') }}",
+            ajax: "{{ secure_url(route('kategori')) }}",
             columns: [
                 { data: 'nama', name: 'nama' },
                 { data: 'aksi', name: 'aksi', orderable: false, searchable: false }
