@@ -11,7 +11,7 @@
         <div class="card-body">
             <form id="filterForm">
                 <div class="row g-3 align-items-end">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="mb-2">
                             <label for="kategori" class="form-label fw-semibold">Kategori</label>
                             <select name="kategori" id="kategori" class="form-select select-form">
@@ -22,18 +22,20 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="mb-2">
                             <label for="tanggal" class="form-label fw-semibold">Tanggal</label>
                             <input type="text" name="tanggal" id="tanggal" class="form-control" placeholder="Pilih rentang tanggal">
                         </div>
                     </div>
-                    <div class="col-md-4 text-md-start text-center">
+                </div>  
+                <div class="row">
+                    <div class="col-md-12 text-md-start text-center">
                         <button type="submit" class="btn btn-primary btn-sm px-4 py-2 mt-2 shadow">
                             <i class="fas fa-search me-1"></i> Cari
                         </button>
                     </div>
-                </div>                
+                </div>              
             </form>
         </div>
     </div>    
