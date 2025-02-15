@@ -33,7 +33,7 @@ class UserController extends Controller
         $totalUser = User::count();
         $totalProduk = DataBarang::sum('stok_total_baik');
         $totalRusak = DataBarang::sum('stok_total_rusak');
-        $totalPeminjaman = Peminjaman::sum('sisa_pinjam');
+        $totalPeminjaman = Peminjaman::where('keterangan', 'Disetujui')->sum('sisa_pinjam');
 
         // Data saat ini untuk user
         $user = auth()->user();

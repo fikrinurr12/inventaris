@@ -126,7 +126,28 @@
                 { data: 'no_invoice', name: 'no_invoice' },
                 { data: 'jumlah', name: 'jumlah' },
                 { data: 'harga', name: 'harga' },
-                { data: 'keterangan', name: 'keterangan' }
+                {
+                    data: 'keterangan',
+                    name: 'keterangan',
+                    render: function(data, type, row) {
+                        let badgeClass = 'badge bg-light text-dark'; // Default warna abu-abu
+                        
+                        if (data) {
+                            let lowerCaseData = data.toLowerCase(); // Konversi ke lowercase
+                            if (lowerCaseData.includes('disetujui')) {
+                                badgeClass = 'badge bg-success';
+                            } else if (lowerCaseData.includes('ditolak')) {
+                                badgeClass = 'badge bg-danger';
+                            } else if (lowerCaseData.includes('menunggu')) {
+                                badgeClass = 'badge bg-warning text-dark';
+                            } else if (lowerCaseData.includes('dibatalkan')) {
+                                badgeClass = 'badge bg-secondary';
+                            }
+                        }
+
+                        return `<span class="${badgeClass}">${data}</span>`;
+                    }
+                }
             ],
             createdRow: function (row, data, dataIndex) {
                 $(row).find('td').addClass('text-sm').addClass('text-center');

@@ -39,6 +39,7 @@ Route::group(['middleware' => ['role:superadmin|admin']], function () {
 
     //Master Barang (SuperAdmin & Admin)
     Route::get('/master_barang', [MasterBarangController::class, 'index'])->name('master_barang');
+    Route::get('/master_barang/stok_sedikit', [MasterBarangController::class, 'stok_sedikit'])->name('master_barang.stok_sedikit');
     Route::get('/master_barang/tambah_barang', [MasterBarangController::class, 'tambah'])->name('tambah_barang');
     Route::post('/master_barang/tambah_barang/tambah', [MasterBarangController::class, 'store'])->name('tambah_barang.store');
     Route::get('/master_barang/edit_barang/{id}', [MasterBarangController::class, 'edit'])->name('edit_barang');

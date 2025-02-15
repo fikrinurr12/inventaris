@@ -37,8 +37,6 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <!-- CSS Files -->
   <link id="pagestyle" href="{{asset('assets/css/argon-dashboard.css?v=2.1.0')}}" rel="stylesheet" />
-  <!-- Rupiah Format -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/autoNumeric/1.9.46/autoNumeric.min.js"></script>
   <!-- sweetalert -->
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
   <!--- sweet alert --->
@@ -63,13 +61,13 @@
     .square-btn {
         width: 35px;
         height: 35px;
-        display: flex;
         align-items: center;
         justify-content: center;
         padding: 0;
         margin: auto;
         border-radius: 5px;
         display: inline-grid;
+        margin-left: 0.2em;
     }
     
     .sidenav {
@@ -512,6 +510,9 @@
 
   {{-- larapex chart --}}
   <script src="https://cdn.jsdelivr.net/npm/larapex-chart@1.0.4/dist/larapexchart.min.js"></script>
+
+  {{-- rupiah format --}}
+  <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script>
 
   <script>
     var win = navigator.platform.indexOf('Win') > -1;

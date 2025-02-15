@@ -57,6 +57,12 @@
                                 <div class="text-danger text-sm">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <!-- Harga Terakhir -->
+                        <div class="form-group mb-3">
+                            <label for="none" class="form-label">Harga Terakhir</label>
+                            <input type="text" class="form-control" disabled value="Rp {{ number_format($barang->harga_terakhir, 0, ',', '.') }}">
+                        </div>
                     
                         <!-- Dropdown Kategori -->
                         <div class="form-group mb-3">

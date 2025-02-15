@@ -54,6 +54,23 @@ class MasterBarangController extends Controller
         return view('master_barang.index');
     }
 
+    public function stok_sedikit(Request $request)
+    {
+        if ($request->ajax()) {
+            $dataBarang = DataBarang::with('kategori')->select('data_barangs.*')
+            ->where('stok_tersedia', '<', 5);
+
+            return DataTables::of($dataBarang)
+                ->addColumn('kategori', function ($row) {
+                    return $row->kategori ? $row->kategori->nama : 'Tidak ada kategori';
+                })
+                ->rawColumns(['kategori']) // Pastikan kolom tombol ditampilkan sebagai HTML
+                ->make(true);
+        }
+
+        return view('dashboard');
+    }
+
     public function tambah()
     {
         $kategoris = Kategori::all(); // Ambil semua kategori

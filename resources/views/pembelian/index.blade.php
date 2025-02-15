@@ -54,7 +54,28 @@
                 { data: 'nama_barang', name: 'nama_barang' },
                 { data: 'jumlah', name: 'jumlah' },
                 { data: 'harga', name: 'harga' },
-                { data: 'keterangan', name: 'keterangan' },
+                {
+                    data: 'keterangan',
+                    name: 'keterangan',
+                    render: function(data, type, row) {
+                        let badgeClass = 'badge bg-light text-dark'; // Default warna abu-abu
+                        
+                        if (data) {
+                            let lowerCaseData = data.toLowerCase(); // Konversi ke lowercase
+                            if (lowerCaseData.includes('disetujui')) {
+                                badgeClass = 'badge bg-success';
+                            } else if (lowerCaseData.includes('ditolak')) {
+                                badgeClass = 'badge bg-danger';
+                            } else if (lowerCaseData.includes('menunggu')) {
+                                badgeClass = 'badge bg-warning text-dark';
+                            } else if (lowerCaseData.includes('dibatalkan')) {
+                                badgeClass = 'badge bg-secondary';
+                            }
+                        }
+
+                        return `<span class="${badgeClass}">${data}</span>`;
+                    }
+                },
                 { data: 'aksi', name: 'aksi', orderable: false, searchable: false }
             ],
             createdRow: function (row, data, dataIndex) {

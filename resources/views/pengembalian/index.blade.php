@@ -28,6 +28,7 @@
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Keterangan</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Kondisi Baik</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Kondisi Rusak</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Jumlah</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Tanggal</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Aksi</th>
                     </tr>
@@ -63,9 +64,31 @@
                     @endhasanyrole
                     { data: 'barang.nama', name: 'barang.nama' },
                     { data: 'sisa_pinjam', name: 'sisa_pinjam' },
-                    { data: 'keterangan', name: 'keterangan' },
+                    {
+                        data: 'keterangan',
+                        name: 'keterangan',
+                        render: function(data, type, row) {
+                            let badgeClass = 'badge bg-light text-dark'; // Default warna abu-abu
+                            
+                            if (data) {
+                                let lowerCaseData = data.toLowerCase(); // Konversi ke lowercase
+                                if (lowerCaseData.includes('disetujui')) {
+                                    badgeClass = 'badge bg-success';
+                                } else if (lowerCaseData.includes('ditolak')) {
+                                    badgeClass = 'badge bg-danger';
+                                } else if (lowerCaseData.includes('menunggu')) {
+                                    badgeClass = 'badge bg-warning text-dark';
+                                } else if (lowerCaseData.includes('dibatalkan')) {
+                                    badgeClass = 'badge bg-secondary';
+                                }
+                            }
+
+                            return `<span class="${badgeClass}">${data}</span>`;
+                        }
+                    },
                     { data: 'kondisi_baik', name: 'kondisi_baik' },
                     { data: 'kondisi_rusak', name: 'kondisi_rusak' },
+                    { data: 'jumlah', name: 'jumlah' },
                     { data: 'tgl_pengembalian', name: 'tgl_pengembalian' },
                     { data: 'aksi', name: 'aksi', orderable: false, searchable: false }
                 ],

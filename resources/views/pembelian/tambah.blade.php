@@ -56,8 +56,7 @@
                         <div class="form-group">
                             <label for="harga" class="form-label">Harga</label>
                             <div class="col-12 input-group">
-                                <span class="input-group-text">Rp.</span>
-                                <input type="number" id="harga" name="harga" class="form-control" required>
+                                <input type="text" id="harga" name="harga" class="form-control" required>
                             </div>
                             @error('harga')
                                 <div class="text-danger text-sm mt-1">{{ $message }}</div>
@@ -99,20 +98,21 @@
     <script>
         $(document).ready(function() {
             $('.select-form').select2({
-                theme: 'bootstrap-5', // Tema Bootstrap 5
+                theme: 'bootstrap-5',
             });
-        });
 
-        const kodeBarangInput = document.getElementById('kode_barang');
+            console.log("AutoNumeric initialized");
 
-        kodeBarangInput.addEventListener('change', function() {
-            const kodeBarang = kodeBarangInput.value;
-
-            // Jika tidak ada barang yang dipilih, beri notifikasi
-            if (kodeBarang === "") {
-                alert("Silahkan Tambah barang terlebih dahulu!");
-            }
+            // Terapkan AutoNumeric ke input harga
+            new AutoNumeric('#harga', {
+                digitGroupSeparator: '.',
+                decimalCharacter: ',',
+                currencySymbol: 'Rp ',
+                currencySymbolPlacement: 'p', // Ubah 'prefix' menjadi 'p'
+                minimumValue: '0'
+            });
         });
     </script>
 @endpush
+
 @endsection

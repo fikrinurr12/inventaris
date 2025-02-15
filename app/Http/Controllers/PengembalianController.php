@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\DB;
 
 use App\Models\Pengembalian;
 use App\Models\Peminjaman;
@@ -38,9 +39,12 @@ class PengembalianController extends Controller
                                 </button>
                             </form>';
 
-                            $buttons .= '<button type="button" class="btn btn-sm btn-danger square-btn" data-bs-toggle="modal" data-bs-target="#rejectModal-' . $pengembalian->id . '">
-                                <i class="fas fa-times"></i>
-                            </button>';
+                            $buttons .= '<form action="' . route('pengembalian.reject', $pengembalian->id) . '" method="POST" style="display:inline;">'
+                                . csrf_field() . method_field('PATCH') . '
+                                <button type="submit" class="btn btn-sm btn-danger square-btn">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </form>';
                         }
                     }
 
@@ -78,17 +82,15 @@ class PengembalianController extends Controller
         $roles = $user->roles->pluck('name');
 
         if ($roles->contains('superadmin') || $roles->contains('admin')) {
-            // Admin melihat semua peminjam yang masih memiliki sisa pinjaman
             $dataPeminjaman = Peminjaman::where('keterangan', 'Disetujui')
                 ->where('sisa_pinjam', '>', 0)
                 ->distinct()
                 ->get();
-            
-            $dataPeminjamanUser = collect(); // Kosongkan untuk admin
+
+            $dataPeminjamanUser = collect(); 
             $id_peminjam = null;
             $nama_peminjam = null;
         } else {
-            // User hanya melihat peminjaman mereka sendiri yang masih ada sisa pinjaman
             $dataPeminjamanUser = Peminjaman::where('id_peminjam', $user->id)
                 ->where('keterangan', 'Disetujui')
                 ->where('sisa_pinjam', '>', 0)
@@ -96,7 +98,7 @@ class PengembalianController extends Controller
 
             $id_peminjam = $user->id;
             $nama_peminjam = $user->name;
-            $dataPeminjaman = collect(); // Kosongkan untuk user
+            $dataPeminjaman = collect();
         }
 
         return view('pengembalian.tambah', compact('dataPeminjaman', 'nama_peminjam', 'id_peminjam', 'dataPeminjamanUser'));
@@ -105,82 +107,63 @@ class PengembalianController extends Controller
     public function store(Request $request)
     {
         $request->validate([
+            'id_barang' => 'required|exists:data_barangs,id',
+            'no_transaksi' => 'required|exists:peminjamans,no_transaksi',
             'kondisi_baik' => 'required|integer|min:0',
             'kondisi_rusak' => 'required|integer|min:0',
             'tgl_pengembalian' => 'required|date',
         ]);
 
         if ($request->kondisi_baik == 0 && $request->kondisi_rusak == 0) {
-            return redirect()->route('pengembalian')->with('failed', 'Kondisi barang minimal harus ada salah satu.');
-        }
-
-        // Cek apakah sudah ada pengembalian dengan status "Menunggu" untuk transaksi yang sama
-        $cekPengembalian = Pengembalian::where('no_transaksi', $request->no_transaksi)
-            ->where('keterangan', 'Menunggu')
-            ->first();
-
-        if ($cekPengembalian) {
-            return redirect()->route('tambah_pengembalian')->with('failed', 'Masih ada pengembalian yang menunggu persetujuan. Harap tunggu hingga diproses.');
+            return back()->with('failed', 'Minimal satu kondisi barang harus diisi.');
         }
 
         // Ambil data peminjaman berdasarkan no_transaksi
         $peminjaman = Peminjaman::where('no_transaksi', $request->no_transaksi)->firstOrFail();
 
-        // Hitung total barang yang dikembalikan
         $total_kembali = $request->kondisi_baik + $request->kondisi_rusak;
 
-        // Cek apakah jumlah yang dikembalikan tidak melebihi yang dipinjam
         if ($total_kembali > $peminjaman->sisa_pinjam) {
-            return redirect()->route('tambah_pengembalian')->with('failed', 'Jumlah pengembalian melebihi jumlah pinjaman.');
+            return back()->with('failed', 'Jumlah pengembalian melebihi jumlah pinjaman.');
         }
 
-        // Tentukan status pengembalian berdasarkan role
-        if (Auth::user()->hasRole('superadmin')) {
-            // Jika superadmin, bisa memilih Disetujui/Ditolak
-            $keterangan = $request->keterangan;
-        } else {
-            // Admin dan User defaultnya adalah Menunggu
-            $keterangan = 'Menunggu';
+        $cekPengembalian = Pengembalian::where('id_barang', $request->id_barang)
+            ->where('keterangan', 'Menunggu')
+            ->first();
+
+        if ($cekPengembalian) {
+            return back()->with('failed', 'Pengembalian sebelumnya masih menunggu persetujuan.');
         }
 
-        // Simpan data pengembalian dengan keterangan 'Menunggu' jika belum disetujui
-        $pengembalian = Pengembalian::create([
-            'no_transaksi' => 'TRXPG' . Carbon::now()->timestamp,
-            'transaksi_keluar_id' => $peminjaman->no_transaksi,
-            'id_barang' => $peminjaman->barang->id,
-            'id_peminjam' => $peminjaman->id_peminjam,
-            'kondisi_baik' => $request->kondisi_baik,
-            'kondisi_rusak' => $request->kondisi_rusak,
-            'jumlah' => $total_kembali,
-            'sisa_pinjam' => $peminjaman->sisa_pinjam,
-            'keterangan' => $keterangan,
-            'tgl_pengembalian' => $request->tgl_pengembalian
-        ]);
+        $keterangan = Auth::user()->hasRole('superadmin') ? $request->keterangan : 'Menunggu';
 
-        // Jika pengembalian disetujui oleh superadmin, update stok barang
-        if ($keterangan == 'Disetujui') {
-            // Ambil data barang
-            $barang = DataBarang::where('id', $peminjaman->barang->id)->firstOrFail();
+        DB::transaction(function () use ($request, $peminjaman, $total_kembali, $keterangan) {
+            $pengembalian = Pengembalian::create([
+                'no_transaksi' => 'TRXPG' . Carbon::now()->timestamp,
+                'transaksi_keluar_id' => $peminjaman->no_transaksi,
+                'id_barang' => $request->id_barang,
+                'id_peminjam' => $peminjaman->id_peminjam,
+                'kondisi_baik' => $request->kondisi_baik,
+                'kondisi_rusak' => $request->kondisi_rusak,
+                'jumlah' => $total_kembali,
+                'sisa_pinjam' => $peminjaman->sisa_pinjam - $total_kembali,
+                'keterangan' => $keterangan,
+                'tgl_pengembalian' => $request->tgl_pengembalian
+            ]);
 
-            // Update stok barang
-            $barang->stok_total_baik -= $pengembalian->kondisi_rusak;
-            $barang->stok_total_rusak += $pengembalian->kondisi_rusak;
-            $barang->stok_tersedia += $pengembalian->kondisi_baik;
-            $barang->save();
+            if ($keterangan == 'Disetujui') {
+                $barang = DataBarang::where('id', $request->id_barang)->firstOrFail();
+                $barang->stok_total_baik = max(0, $barang->stok_total_baik - $pengembalian->kondisi_rusak);
+                $barang->stok_total_rusak += $pengembalian->kondisi_rusak;
+                $barang->stok_tersedia += $pengembalian->kondisi_baik;
+                $barang->save();
 
-            $pengembalian->sisa_pinjam = $peminjaman->sisa_pinjam;
-            $pengembalian->save();
+                $peminjaman->sisa_pinjam -= $total_kembali;
+                $peminjaman->save();
+            }
+        });
 
-            $pengembalian->sisa_pinjam -= $total_kembali;   
-            $pengembalian->save();
-
-            // Kurangi sisa pinjaman di peminjaman
-            $peminjaman->sisa_pinjam -= $total_kembali;
-            $peminjaman->save();
-            return redirect()->route('pengembalian')->with('success', 'Pengembalian berhasil disimpan.');
-        }
-
-        return redirect()->route('pengembalian')->with('success', 'Pengembalian berhasil disimpan. Menunggu konfirmasi.');
+        return redirect()->route('pengembalian')->with('success', 'Pengembalian berhasil disimpan' . ($keterangan == 'Menunggu' ? ' dan menunggu konfirmasi.' : '.'));
     }
 
     public function approve($id)
@@ -236,10 +219,10 @@ class PengembalianController extends Controller
 
         if ($pengembalian->keterangan === 'Menunggu') {
             // Simpan alasan penolakan
-            $pengembalian->keterangan = 'Ditolak: ' . $request->alasan;
+            $pengembalian->keterangan = 'Ditolak';
             $pengembalian->save();
             
-            return back()->with('success', 'Pengembalian telah ditolak dengan alasan: ' . $request->alasan);
+            return back()->with('success', 'Pengembalian telah ditolak');
         }
 
         return back()->with('failed', 'Pengembalian tidak dapat ditolak.');

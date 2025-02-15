@@ -42,7 +42,7 @@ class PeminjamanController extends Controller
                     if (Auth::user()->hasRole('superadmin')) {
                         if ($row->keterangan === 'Menunggu') {
                             $buttons .= '<form action="'.$approveUrl.'" method="POST" class="d-inline">'.csrf_field().method_field('PATCH').'<button type="submit" class="btn btn-sm btn-success square-btn"><i class="fas fa-check"></i></button></form>';
-                            $buttons .= '<button type="button" class="btn btn-sm btn-danger square-btn" data-bs-toggle="modal" data-bs-target="#rejectModal-'.$row->id.'"><i class="fas fa-times"></i></button>';
+                            $buttons .= '<form action="'.$rejectUrl.'" method="POST" class="d-inline">'.csrf_field().method_field('PATCH').'<button type="submit" class="btn btn-sm btn-danger square-btn"><i class="fas fa-times"></i></button></form>';
                         }
                     }
                     
@@ -182,10 +182,10 @@ class PeminjamanController extends Controller
 
         if ($peminjaman->keterangan === 'Menunggu') {
             // Simpan alasan penolakan
-            $peminjaman->keterangan = 'Ditolak: ' . $request->alasan;
+            $peminjaman->keterangan = 'Ditolak';
             $peminjaman->save();
             
-            return back()->with('success', 'Peminjaman telah ditolak dengan alasan: ' . $request->alasan);
+            return back()->with('success', 'Peminjaman telah ditolak');
         }
 
         return back()->with('failed', 'Peminjaman tidak dapat ditolak.');
@@ -219,6 +219,7 @@ class PeminjamanController extends Controller
             'status' => 'success',
             'data' => $peminjaman->map(function ($item) {
                 return [
+                    'id_barang' => $item->id_barang,
                     'no_transaksi' => $item->no_transaksi,
                     'nama_barang' => $item->barang->nama,
                     'sisa_pinjam' => $item->sisa_pinjam,

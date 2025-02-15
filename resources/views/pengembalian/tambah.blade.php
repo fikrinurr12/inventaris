@@ -37,16 +37,24 @@
                                         <option value="{{ $peminjam->user->id }}">{{ $peminjam->user->name }}</option>
                                     @endforeach
                                 </select>
+                                @error('id_peminjam')
+                                    <div class="text-danger text-sm mt-1">{{ $message }}</div>
+                                @enderror
                             </div>
                             @endhasanyrole
                         </div>
+
+                        <input type="hidden" name="no_transaksi" id="no_transaksi">
                     
                         <!-- Input Barang -->
                         <div class="form-group">
-                            <label for="no_transaksi" class="form-label">Barang Pinjaman</label>
-                            <select id="no_transaksi" name="no_transaksi" class="form-control select-form" required>
+                            <label for="id_barang" class="form-label">Barang Pinjaman</label>
+                            <select id="id_barang" name="id_barang" class="form-control select-form" required>
                                 <option value="" disabled selected>-- Pilih Barang --</option>
                             </select>
+                            @error('id_barang')
+                                <div class="text-danger text-sm mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                     
                         <!-- Input Kondisi Baik -->
@@ -54,6 +62,9 @@
                             <label for="kondisi_baik" class="form-label">Kondisi Baik</label>
                             <input type="number" id="kondisi_baik" name="kondisi_baik" class="form-control" required value="0">
                             <span class="text-sm">*Beri angka 0 Jika Tidak Ada</span>
+                            @error('kondisi_baik')
+                                <div class="text-danger text-sm mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                     
                         <!-- Input Kondisi Rusak -->
@@ -61,12 +72,18 @@
                             <label for="kondisi_rusak" class="form-label">Kondisi Rusak</label>
                             <input type="number" id="kondisi_rusak" name="kondisi_rusak" class="form-control" required value="0">
                             <span class="text-sm">*Beri angka 0 Jika Tidak Ada</span>
+                            @error('kondisi_rusak')
+                                <div class="text-danger text-sm mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                     
                         <!-- Input Tanggal Pengembalian -->
                         <div class="form-group">
                             <label for="tgl_pengembalian" class="form-label">Tanggal Pengembalian</label>
                             <input type="date" id="tgl_pengembalian" name="tgl_pengembalian" class="form-control" required>
+                            @error('tgl_pengembalian')
+                                <div class="text-danger text-sm mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                     
                         <!-- Input Keterangan (hanya superadmin) -->
@@ -78,6 +95,9 @@
                                 <option value="Disetujui">Disetujui</option>
                                 <option value="Ditolak">Ditolak</option>
                             </select>
+                            @error('keterangan')
+                                <div class="text-danger text-sm mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                         @endhasrole
                     
@@ -99,10 +119,11 @@
     $(document).ready(function() {
         $('.select-form').select2({ theme: 'bootstrap-5' });
 
-        let barangSelect = $('#no_transaksi'); 
+        let barangSelect = $('#id_barang'); 
         let userSelect = $('#id_peminjam');
+        let noTransaksiInput = $('#no_transaksi');
 
-        barangSelect.prop('disabled', true); 
+        barangSelect.prop('disabled', true);
 
         function fetchBarang(userId) {
             if (!userId) return;
@@ -111,43 +132,38 @@
 
             let url = `{{ route('get.barang.peminjaman', ':id') }}`.replace(':id', userId);
 
-            $.ajax({
-                url: url,
-                type: 'GET',
-                dataType: 'json',
-                success: function(response) {
-                    barangSelect.empty().append('<option value="" disabled selected>-- Pilih Barang --</option>');
+            $.get(url, function(response) {
+                barangSelect.empty().append('<option value="" disabled selected>-- Pilih Barang --</option>');
 
-                    if (response.status === 'success' && response.data.length > 0) {
-                        $.each(response.data, function(index, item) {
-                            barangSelect.append(
-                                `<option value="${item.no_transaksi}">
-                                    ${item.no_transaksi} | ${item.nama_barang} | (Sisa Pinjam: ${item.sisa_pinjam}) | Tanggal: ${item.tgl_peminjaman}
-                                </option>`
-                            );
-                        });
-                        barangSelect.prop('disabled', false);
-                    } else {
-                        barangSelect.append('<option value="" disabled>Tidak ada barang tersedia</option>');
-                        barangSelect.prop('disabled', true);
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error(`AJAX Error: ${status} - ${error}`);
-                    alert('Gagal mengambil data barang. Silakan coba lagi.');
-                    barangSelect.html('<option value="" disabled>Tidak dapat mengambil data</option>').prop('disabled', true);
+                if (response.status === 'success' && response.data.length > 0) {
+                    $.each(response.data, function(index, item) {
+                        barangSelect.append(
+                            `<option value="${item.id_barang}" data-transaksi="${item.no_transaksi}">
+                                ${item.no_transaksi} | ${item.nama_barang} | (Sisa Pinjam: ${item.sisa_pinjam}) | Tanggal: ${item.tgl_peminjaman}
+                            </option>`
+                        );
+                    });
+                    barangSelect.prop('disabled', false);
+                } else {
+                    barangSelect.append('<option value="" disabled>Tidak ada barang tersedia</option>').prop('disabled', true);
                 }
+            }).fail(function() {
+                alert('Gagal mengambil data barang. Silakan coba lagi.');
+                barangSelect.html('<option value="" disabled>Tidak dapat mengambil data</option>').prop('disabled', true);
             });
         }
 
         @role('user')
-        let userId = $('input[name="id_peminjam"]').val();
-        if (userId) fetchBarang(userId);
+        fetchBarang($('input[name="id_peminjam"]').val());
         @endrole
 
+        barangSelect.on('change', function() {
+            let selectedOption = $(this).find(':selected');
+            noTransaksiInput.val(selectedOption.data('transaksi'));
+        });
+
         userSelect.on('change', function() {
-            let selectedUserId = $(this).val();
-            fetchBarang(selectedUserId);
+            fetchBarang($(this).val());
         });
     });
 </script>
