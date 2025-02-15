@@ -24,4 +24,6 @@
     RewriteRule ^ index.php [L]
 
     Header set Content-Security-Policy "script-src 'self' 'unsafe-eval';"
+    Header set Content-Security-Policy "default-src 'self' https://inventaris-production-9c0b.up.railway.app"
+
 </IfModule>

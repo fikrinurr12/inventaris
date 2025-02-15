@@ -32,7 +32,6 @@
 </div>
 
 @push('scripts_js')
-    <script src="https://cdn.datatables.net/2.2.1/js/dataTables.min.js"></script>
     <script>
       $(document).ready(function() {
         $('#tabel_kategori').DataTable({
@@ -46,6 +45,9 @@
                  'rt' + 
                  '<"row mt-3 d-flex align-items-center"<"col-md-6"i><"col-md-6 text-end"p>>',
             lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]], // Opsi pilihan jumlah data
+            
+            dd(route('kategori'));
+
             ajax: "{{ route('kategori') }}",
             columns: [
                 { data: 'nama', name: 'nama' },
