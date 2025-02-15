@@ -20,7 +20,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="icon" type="image/png" href="{{asset('assets/img/logos/Sukun_Mc_Wartono.jpeg')}}">
+  <link rel="icon" type="image/png" href="{{secure_asset('assets/img/logos/Sukun_Mc_Wartono.jpeg')}}">
   <title>
     @yield('title')
   </title>
@@ -36,7 +36,7 @@
   <!-- Font Awesome Icons -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
   <!-- CSS Files -->
-  <link id="pagestyle" href="{{asset('assets/css/argon-dashboard.css?v=2.1.0')}}" rel="stylesheet" />
+  <link id="pagestyle" href="{{secure_asset('assets/css/argon-dashboard.css?v=2.1.0')}}" rel="stylesheet" />
   <!-- sweetalert -->
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
   <!--- sweet alert --->
@@ -234,7 +234,7 @@
   <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 shadow-sm" id="sidenav-main">
     <div class="sidenav-header d-flex align-items-center justify-content-between">
       <a class="navbar-brand d-flex align-items-center m-0" href="{{ route('dashboard') }}">
-          <img src="{{ asset('assets/img/logos/Sukun_Mc_Wartono.jpeg') }}" width="60" height="40">
+          <img src="{{ secure_asset('assets/img/logos/Sukun_Mc_Wartono.jpeg') }}" width="60" height="40">
           <span class="ms-3 font-weight-bold text-dark">Inventaris</span>
       </a>
       <i class="fas fa-times text-white opacity-75 cursor-pointer d-xl-none" id="iconSidenav"></i>
@@ -485,11 +485,11 @@
     @yield('content')
   
   <!--   Core JS Files   -->
-  <script src="{{asset('assets/js/core/popper.min.js')}}"></script>
-  <script src="{{asset('assets/js/core/bootstrap.min.js')}}"></script>
-  <script src="{{asset('assets/js/plugins/perfect-scrollbar.min.js')}}"></script>
-  <script src="{{asset('assets/js/plugins/smooth-scrollbar.min.js')}}"></script>
-  <script src="{{asset('assets/js/plugins/chartjs.min.js')}}"></script>
+  <script src="{{secure_asset('assets/js/core/popper.min.js')}}"></script>
+  <script src="{{secure_asset('assets/js/core/bootstrap.min.js')}}"></script>
+  <script src="{{secure_asset('assets/js/plugins/perfect-scrollbar.min.js')}}"></script>
+  <script src="{{secure_asset('assets/js/plugins/smooth-scrollbar.min.js')}}"></script>
+  <script src="{{secure_asset('assets/js/plugins/chartjs.min.js')}}"></script>
 
   {{-- datatables js --}}
   <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
@@ -638,10 +638,10 @@
   <script async defer src="https://buttons.github.io/buttons.js"></script>
 
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="{{ asset('assets/js/argon-dashboard.min.js?v=2.1.0') }}"></script>
+  <script src="{{ secure_asset('assets/js/argon-dashboard.min.js?v=2.1.0') }}"></script>
 
   {{-- custom js --}}
-  <script src="{{ asset('assets/js/custom-script.js') }}"></script>
+  <script src="{{ secure_asset('assets/js/custom-script.js') }}"></script>
   
 </body>
 
