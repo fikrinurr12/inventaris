@@ -36,6 +36,8 @@
     <script>
       $(document).ready(function() {
         $('#tabel_kategori').DataTable({
+            processing: true,
+            serverSide: true,
             responsive: true,
             stateSave: true,
             scrollY: "1000px", // Tinggi maksimal tabel dengan scroll
