@@ -111,6 +111,22 @@ class PeminjamanController extends Controller
             return back()->with('failed', 'Peminjam tidak ditemukan.');
         }
 
+        // **Cek apakah ada peminjaman "Menunggu" untuk peminjam dan barang yang sama**
+        $cekPeminjaman = Peminjaman::where('id_peminjam', $peminjam->id)
+        ->where('id_barang', $validated['id_barang'])
+        ->where('keterangan', 'Menunggu')
+        ->exists();
+
+        // **Jika admin, cek apakah pengguna yang dipinjamkan masih memiliki barang yang "Menunggu"**
+        if ($user->hasRole('admin') && $cekPeminjaman) {
+            return back()->with('failed', 'Peminjam masih memiliki peminjaman barang ini yang menunggu persetujuan.');
+        }
+
+        // **Jika user, cek apakah dia masih memiliki peminjaman barang yang "Menunggu"**
+        if ($user->hasRole('user') && $cekPeminjaman) {
+            return back()->with('failed', 'Anda masih memiliki peminjaman barang ini yang menunggu persetujuan.');
+        }
+
         // Ambil data barang berdasarkan kode
         $barang = DataBarang::where('id', $validated['id_barang'])->first();
 
@@ -209,7 +225,10 @@ class PeminjamanController extends Controller
 
     public function getBarangPeminjaman($id)
     {
-        $peminjaman = Peminjaman::where('id_peminjam', $id)->where('sisa_pinjam', '>', 0)->get();
+        $peminjaman = Peminjaman::where('id_peminjam', $id)
+        ->where('sisa_pinjam', '>', 0)
+        ->where('keterangan','Disetujui')
+        ->get();
 
         if ($peminjaman->isEmpty()) {
             return response()->json(['status' => 'error', 'message' => 'Tidak ada barang yang bisa dikembalikan.']);
