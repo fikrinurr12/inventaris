@@ -30,6 +30,17 @@
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
   <!--- sweet alert --->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <style>
+    .hide-mobile-invert{
+      display: none !important;
+    }
+
+    @media (max-width: 900.98px) {
+      .hide-mobile-invert{
+        display: block !important;
+      }
+    }
+  </style>
 </head>
 
 <body class="">

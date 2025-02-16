@@ -10,6 +10,10 @@
             <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column mx-lg-0 mx-auto">
               <div class="card card-plain">
                 <div class="card-header pb-0 text-start">
+                  @php
+                  $logo = request()->isSecure() ? secure_asset('assets/img/logos/Sukun_Mc_Wartono.jpeg') : asset('assets/img/logos/Sukun_Mc_Wartono.jpeg');
+                  @endphp
+                  <img src="{{ $logo }}" class="d-block mx-auto img-fluid w-30 mb-6 hide-mobile-invert">
                   <!-- Menampilkan Flash Message -->
                   @if(session('success'))
                     <div class="alert alert-success text-white">
