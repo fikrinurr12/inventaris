@@ -8,6 +8,7 @@ use App\Models\DataBarang;
 use App\Models\Kategori;
 
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Intervention\Image\Facades\Image;
 
 use Yajra\DataTables\Facades\DataTables;
 
@@ -103,11 +104,24 @@ class MasterBarangController extends Controller
 
         $validated['kode'] = $kodeBaru; // Masukkan kode ke dalam data yang akan disimpan
 
-        // Upload ke Cloudinary
         if ($request->hasFile('foto')) {
-            $uploadedFile = Cloudinary::upload($request->file('foto')->getRealPath())->getSecurePath();
-            $validated['foto'] = $uploadedFile;
-        }else {
+            $uploadedFile = $request->file('foto');
+        
+            // Jika ukuran file lebih dari 1MB, kompresi menggunakan Cloudinary
+            if ($uploadedFile->getSize() > 1024 * 1024) {
+                $uploadResponse = Cloudinary::upload($uploadedFile->getRealPath(), [
+                    'folder' => 'inventaris',  // Simpan ke folder inventaris
+                    'quality' => 'auto:low',   // Kompresi otomatis
+                    'format' => 'jpg'          // Pastikan format jpg
+                ]);
+            } else {
+                $uploadResponse = Cloudinary::upload($uploadedFile->getRealPath(), [
+                    'folder' => 'inventaris',  // Simpan ke folder inventaris
+                ]);
+            }
+        
+            $validated['foto'] = $uploadResponse->getSecurePath(); // Simpan URL gambar ke database
+        } else {
             return back()->with('failed', 'Gagal mengunggah gambar ke Cloud.');
         }
 
@@ -148,20 +162,31 @@ class MasterBarangController extends Controller
             'harga_terakhir' => 'required|numeric',
         ]);
 
-        // Update foto jika ada file baru diunggah
         if ($request->hasFile('foto')) {
-            // Hapus foto lama di Cloudinary jika ada
+            // Hapus foto lama jika ada
             if ($barang->foto) {
-                $publicId = pathinfo($barang->foto, PATHINFO_FILENAME);
-                Cloudinary::destroy($publicId);
+                $publicId = pathinfo(parse_url($barang->foto, PHP_URL_PATH), PATHINFO_FILENAME);
+                Cloudinary::destroy('inventaris/' . $publicId);
             }
-
-            // Upload foto baru ke Cloudinary
-            $uploadedFile = Cloudinary::upload($request->file('foto')->getRealPath())->getSecurePath();
-            $validated['foto'] = $uploadedFile;
-
-        } else{
-            return back()->with('failed', 'Gagal mengunggah gambar ke Cloud.');
+        
+            $uploadedFile = $request->file('foto');
+        
+            // Jika ukuran file lebih dari 1MB, kompresi otomatis
+            if ($uploadedFile->getSize() > 1024 * 1024) {
+                $uploadResponse = Cloudinary::upload($uploadedFile->getRealPath(), [
+                    'folder' => 'inventaris',
+                    'quality' => 'auto:low',
+                    'format' => 'jpg'
+                ]);
+            } else {
+                $uploadResponse = Cloudinary::upload($uploadedFile->getRealPath(), [
+                    'folder' => 'inventaris'
+                ]);
+            }
+        
+            $validated['foto'] = $uploadResponse->getSecurePath();
+        }else{
+                return back()->with('failed', 'Gagal mengunggah gambar ke Cloud.');
         }
 
         // // **Proses update foto jika ada**
@@ -202,8 +227,11 @@ class MasterBarangController extends Controller
 
         // Hapus foto dari Cloudinary jika ada
         if ($barang->foto) {
-            $publicId = pathinfo($barang->foto, PATHINFO_FILENAME);
-            Cloudinary::destroy($publicId);
+            // Ambil Public ID dari URL Cloudinary
+            $publicId = pathinfo(parse_url($barang->foto, PHP_URL_PATH), PATHINFO_FILENAME);
+
+            // Hapus dari Cloudinary
+            Cloudinary::destroy('inventaris/' . $publicId);
         }
 
         // Hapus barang
