@@ -36,9 +36,10 @@
     }
 
     @media (max-width: 900.98px) {
-      .hide-mobile-invert{
-        display: block !important;
-      }
+        .hide-mobile-invert {
+            display: block !important;
+            margin-top: -3em !important;
+        }
     }
   </style>
 </head>
