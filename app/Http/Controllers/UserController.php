@@ -97,7 +97,9 @@ class UserController extends Controller
                 'name' => "Pengembalian Tahun $tahunSekarang",
                 'data' => $chartDataPengembalian // Data Pengembalian
             ]
-        ]);
+        ])
+        ->setToolbar(true) // Menampilkan opsi interaksi
+        ->setDataLabels(true); // Menampilkan nilai di chart;
 
         //chart
         // Ambil total stok dari tabel DataBarang
@@ -105,16 +107,22 @@ class UserController extends Controller
         $totalBaik = DataBarang::sum('stok_total_baik') ?? 0;
         $totalRusak = DataBarang::sum('stok_total_rusak') ?? 0;
 
-        // Buat chart pie
+        // Buat chart donut
         $stokChart = (new LarapexChart)
-        ->setType('pie')
-        ->setLabels(['Tersedia', 'Total Baik', 'Total Rusak'])
+        ->setType('donut')
+        ->setLabels([
+            "Tersedia ({$totalTersedia})", 
+            "Total Baik ({$totalBaik})", 
+            "Total Rusak ({$totalRusak})"
+        ])
         ->setDataset([
             (int) $totalTersedia, 
             (int) $totalBaik, 
             (int) $totalRusak
         ])
-        ->setHeight(263);
+        ->setHeight(263)
+        ->setToolbar(true) // Menampilkan opsi interaksi
+        ->setDataLabels(true); // Menampilkan nilai di chart
     
         return view('dashboard', compact(
             'totalUser', 
