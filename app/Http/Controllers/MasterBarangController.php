@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\DataBarang;
 use App\Models\Kategori;
 
-use App\Helpers\GitHubStorage;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 use Yajra\DataTables\Facades\DataTables;
 
@@ -103,16 +103,12 @@ class MasterBarangController extends Controller
 
         $validated['kode'] = $kodeBaru; // Masukkan kode ke dalam data yang akan disimpan
 
-        // **Upload ke GitHub**
+        // Upload ke Cloudinary
         if ($request->hasFile('foto')) {
-            $uploadPath = 'tree/master/public/assets/img/upload';
-            $uploadedUrl = GitHubStorage::uploadImage($request->file('foto'), $uploadPath);
-
-            if ($uploadedUrl) {
-                $validated['foto'] = $uploadedUrl; // Simpan URL GitHub
-            } else {
-                return back()->with('failed', 'Gagal mengunggah gambar ke GitHub.');
-            }
+            $uploadedFile = Cloudinary::upload($request->file('foto')->getRealPath())->getSecurePath();
+            $validated['foto'] = $uploadedFile;
+        }else {
+            return back()->with('failed', 'Gagal mengunggah gambar ke Cloud.');
         }
 
         // // **Proses upload foto storage**
@@ -152,23 +148,20 @@ class MasterBarangController extends Controller
             'harga_terakhir' => 'required|numeric',
         ]);
 
-        // **Update foto jika ada file baru diunggah**
+        // Update foto jika ada file baru diunggah
         if ($request->hasFile('foto')) {
-            // Hapus foto lama di GitHub jika ada
+            // Hapus foto lama di Cloudinary jika ada
             if ($barang->foto) {
-                $oldPath = str_replace("https://raw.githubusercontent.com/fikrinurr12/inventaris/tree/master/public/assets/img/upload", "", $barang->foto);
-                GitHubStorage::deleteImage($oldPath);
+                $publicId = pathinfo($barang->foto, PATHINFO_FILENAME);
+                Cloudinary::destroy($publicId);
             }
 
-            // Upload foto baru ke GitHub
-            $uploadPath = 'tree/master/public/assets/img/upload';
-            $uploadedUrl = GitHubStorage::uploadImage($request->file('foto'), $uploadPath);
+            // Upload foto baru ke Cloudinary
+            $uploadedFile = Cloudinary::upload($request->file('foto')->getRealPath())->getSecurePath();
+            $validated['foto'] = $uploadedFile;
 
-            if ($uploadedUrl) {
-                $validated['foto'] = $uploadedUrl;
-            } else {
-                return back()->with('failed', 'Gagal mengunggah gambar ke GitHub.');
-            }
+        } else{
+            return back()->with('failed', 'Gagal mengunggah gambar ke Cloud.');
         }
 
         // // **Proses update foto jika ada**
@@ -207,10 +200,10 @@ class MasterBarangController extends Controller
         //     unlink(public_path($barang->foto)); // Hapus file dari folder
         // }
 
-        // **Hapus gambar dari GitHub**
+        // Hapus foto dari Cloudinary jika ada
         if ($barang->foto) {
-            $filePath = str_replace("https://raw.githubusercontent.com/fikrinurr12/inventaris/tree/master/public/assets/img/upload", "", $barang->foto);
-            GitHubStorage::deleteImage($filePath);
+            $publicId = pathinfo($barang->foto, PATHINFO_FILENAME);
+            Cloudinary::destroy($publicId);
         }
 
         // Hapus barang
