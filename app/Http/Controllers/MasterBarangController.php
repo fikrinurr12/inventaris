@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+
 use App\Models\DataBarang;
 use App\Models\Kategori;
+
+use App\Helpers\GitHubStorage;
 
 use Yajra\DataTables\Facades\DataTables;
 
@@ -100,13 +103,25 @@ class MasterBarangController extends Controller
 
         $validated['kode'] = $kodeBaru; // Masukkan kode ke dalam data yang akan disimpan
 
-        // **Proses upload foto**
+        // **Upload ke GitHub**
         if ($request->hasFile('foto')) {
-            $foto = $request->file('foto');
-            $fotoName = time() . '.' . $foto->getClientOriginalExtension();
-            $foto->move(public_path('assets/img/upload'), $fotoName);
-            $validated['foto'] = 'assets/img/upload/' . $fotoName;
+            $uploadPath = 'tree/master/public/assets/img/upload';
+            $uploadedUrl = GitHubStorage::uploadImage($request->file('foto'), $uploadPath);
+
+            if ($uploadedUrl) {
+                $validated['foto'] = $uploadedUrl; // Simpan URL GitHub
+            } else {
+                return back()->with('error', 'Gagal mengunggah gambar ke GitHub.');
+            }
         }
+
+        // // **Proses upload foto storage**
+        // if ($request->hasFile('foto')) {
+        //     $foto = $request->file('foto');
+        //     $fotoName = time() . '.' . $foto->getClientOriginalExtension();
+        //     $foto->move(public_path('assets/img/upload'), $fotoName);
+        //     $validated['foto'] = 'assets/img/upload/' . $fotoName;
+        // }
 
         // **Simpan data barang**
         DataBarang::create($validated);
@@ -137,19 +152,38 @@ class MasterBarangController extends Controller
             'harga_terakhir' => 'required|numeric',
         ]);
 
-        // **Proses update foto jika ada**
+        // **Update foto jika ada file baru diunggah**
         if ($request->hasFile('foto')) {
-            // Hapus foto lama jika ada
-            if ($barang->foto && file_exists(public_path($barang->foto))) {
-                unlink(public_path($barang->foto));
+            // Hapus foto lama di GitHub jika ada
+            if ($barang->foto) {
+                $oldPath = str_replace("https://raw.githubusercontent.com/fikrinurr12/inventaris/tree/master/public/assets/img/upload", "", $barang->foto);
+                GitHubStorage::deleteImage($oldPath);
             }
-            
-            // Simpan foto baru
-            $foto = $request->file('foto');
-            $fotoName = time() . '.' . $foto->getClientOriginalExtension();
-            $foto->move(public_path('assets/img/upload'), $fotoName);
-            $validated['foto'] = 'assets/img/upload/' . $fotoName;
+
+            // Upload foto baru ke GitHub
+            $uploadPath = 'tree/master/public/assets/img/upload';
+            $uploadedUrl = GitHubStorage::uploadImage($request->file('foto'), $uploadPath);
+
+            if ($uploadedUrl) {
+                $validated['foto'] = $uploadedUrl;
+            } else {
+                return back()->with('error', 'Gagal mengunggah gambar ke GitHub.');
+            }
         }
+
+        // // **Proses update foto jika ada**
+        // if ($request->hasFile('foto')) {
+        //     // Hapus foto lama jika ada
+        //     if ($barang->foto && file_exists(public_path($barang->foto))) {
+        //         unlink(public_path($barang->foto));
+        //     }
+            
+        //     // Simpan foto baru
+        //     $foto = $request->file('foto');
+        //     $fotoName = time() . '.' . $foto->getClientOriginalExtension();
+        //     $foto->move(public_path('assets/img/upload'), $fotoName);
+        //     $validated['foto'] = 'assets/img/upload/' . $fotoName;
+        // }
 
         // **Update data barang**
         $barang->update($validated);
@@ -168,9 +202,15 @@ class MasterBarangController extends Controller
                 ->with('failed', 'Barang tidak dapat dihapus karena masih memiliki transaksi terkait.');
         }
 
-        // Hapus foto jika ada
-        if ($barang->foto && file_exists(public_path($barang->foto))) {
-            unlink(public_path($barang->foto)); // Hapus file dari folder
+        // // Hapus foto jika ada
+        // if ($barang->foto && file_exists(public_path($barang->foto))) {
+        //     unlink(public_path($barang->foto)); // Hapus file dari folder
+        // }
+
+        // **Hapus gambar dari GitHub**
+        if ($barang->foto) {
+            $filePath = str_replace("https://raw.githubusercontent.com/fikrinurr12/inventaris/tree/master/public/assets/img/upload", "", $barang->foto);
+            GitHubStorage::deleteImage($filePath);
         }
 
         // Hapus barang
