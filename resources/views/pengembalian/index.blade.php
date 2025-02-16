@@ -77,7 +77,7 @@
                                 } else if (lowerCaseData.includes('ditolak')) {
                                     badgeClass = 'badge bg-danger';
                                 } else if (lowerCaseData.includes('menunggu')) {
-                                    badgeClass = 'badge bg-warning text-dark';
+                                    badgeClass = 'badge bg-warning text-white';
                                 } else if (lowerCaseData.includes('dibatalkan')) {
                                     badgeClass = 'badge bg-secondary';
                                 }

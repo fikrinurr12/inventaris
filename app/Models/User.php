@@ -24,12 +24,20 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function peminjaman()
+    {
+        return $this->hasMany(Peminjaman::class, 'id_peminjam', 'id');
+    }
+
+    public function pengembalian()
+    {
+        return $this->hasMany(Pengembalian::class, 'id_peminjam', 'id');
+    }
+
     public function canBeDeleted(): bool
     {
-        return !$this->pembelian()->exists() &&
-            !$this->peminjaman()->exists() &&
-            !$this->pengembalian()->exists() &&
-            !$this->penyesuaian_stok()->exists();
+        return !$this->peminjaman()->exists() &&
+            !$this->pengembalian()->exists();
     }
 
     /**
