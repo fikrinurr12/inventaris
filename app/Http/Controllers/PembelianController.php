@@ -70,7 +70,7 @@ class PembelianController extends Controller
             'no_invoice' => 'required|min:8',
             'id_barang' => 'required|exists:data_barangs,id', // Pastikan barang ada
             'jumlah' => 'required|integer|min:1',
-            'harga' => 'required|numeric',
+            'harga' => 'required',
             'tanggal' => 'required|date',
             'keterangan' => 'nullable|min:6',
         ]);
