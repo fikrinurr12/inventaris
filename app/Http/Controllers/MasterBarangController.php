@@ -85,7 +85,7 @@ class MasterBarangController extends Controller
     {
         $validated = $request->validate([
             // Hapus 'kode' dari validasi karena akan dibuat otomatis
-            'foto' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'foto' => 'required|image|mimes:jpeg,png,jpg,gif|max:5012',
             'nama' => 'required|string|max:255|min:2',
             'merk' => 'required|string|max:255|min:2',
             'kategori_id' => 'required|exists:kategoris,id',
@@ -153,7 +153,7 @@ class MasterBarangController extends Controller
 
         $validated = $request->validate([
             'kode' => 'required|string|max:255|min:3|unique:data_barangs,kode,' . $id, // Kode unik tapi bisa tetap sama
-            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5012',
             'nama' => 'required|string|max:255|min:2',
             'merk' => 'required|string|max:255|min:2',
             'kategori_id' => 'required|exists:kategoris,id',
