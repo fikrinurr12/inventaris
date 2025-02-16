@@ -320,6 +320,12 @@ class UserController extends Controller
             return redirect()->route('data_pengguna')->with('failed', 'Tidak bisa menghapus superadmin terakhir.');
         }
 
+        // Cek apakah barang memiliki data terkait
+        if (!$user->canBeDeleted()) {
+            return redirect()->route('data_pengguna')
+                ->with('failed', 'User tidak dapat dihapus karena masih memiliki transaksi terkait.');
+        }
+
         // Hapus relasi user dengan role dari tabel model_has_roles
         DB::table('model_has_roles')->where('model_id', $id)->delete();
 

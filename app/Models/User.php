@@ -24,6 +24,14 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function canBeDeleted(): bool
+    {
+        return !$this->pembelian()->exists() &&
+            !$this->peminjaman()->exists() &&
+            !$this->pengembalian()->exists() &&
+            !$this->penyesuaian_stok()->exists();
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
