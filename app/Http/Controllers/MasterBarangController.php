@@ -111,7 +111,7 @@ class MasterBarangController extends Controller
             if ($uploadedUrl) {
                 $validated['foto'] = $uploadedUrl; // Simpan URL GitHub
             } else {
-                return back()->with('error', 'Gagal mengunggah gambar ke GitHub.');
+                return back()->with('failed', 'Gagal mengunggah gambar ke GitHub.');
             }
         }
 
@@ -167,7 +167,7 @@ class MasterBarangController extends Controller
             if ($uploadedUrl) {
                 $validated['foto'] = $uploadedUrl;
             } else {
-                return back()->with('error', 'Gagal mengunggah gambar ke GitHub.');
+                return back()->with('failed', 'Gagal mengunggah gambar ke GitHub.');
             }
         }
 
