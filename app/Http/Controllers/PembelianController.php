@@ -75,6 +75,8 @@ class PembelianController extends Controller
             'keterangan' => 'nullable|min:6',
         ]);
 
+        $validated['harga'] = (int) str_replace(['.', ','], '', $validated['harga']);
+
         if($validated['keterangan'] === "Dibatalkan" || $validated['keterangan'] === "dibatalkan"){
             return back()->with('failed','Keterangan tidak bisa ditambahkan');
         }
