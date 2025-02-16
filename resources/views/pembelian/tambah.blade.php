@@ -62,6 +62,12 @@
                                 <div class="text-danger text-sm mt-1">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <!-- Total Harga (Readonly) -->
+                        <div class="form-group">
+                            <label for="total_harga" class="form-label">Total Harga</label>
+                            <input type="text" id="total_harga" class="form-control" readonly>
+                        </div>
                     
                         <!-- Input Tanggal -->
                         <div class="form-group">
@@ -103,13 +109,44 @@
 
             console.log("AutoNumeric initialized");
 
-            // Terapkan AutoNumeric ke input harga
-            new AutoNumeric('#harga', {
+            // Terapkan AutoNumeric ke input harga tanpa desimal
+            let autoNumericHarga = new AutoNumeric('#harga', {
                 digitGroupSeparator: '.',
                 decimalCharacter: ',',
                 currencySymbol: 'Rp ',
-                currencySymbolPlacement: 'p', // Ubah 'prefix' menjadi 'p'
-                minimumValue: '0'
+                currencySymbolPlacement: 'p', // Simbol di depan
+                minimumValue: '0',
+                decimalPlaces: 0 // **Mencegah penambahan desimal**
+            });
+
+            let autoNumericTotal = new AutoNumeric('#total_harga', {
+                digitGroupSeparator: '.',
+                decimalCharacter: ',',
+                currencySymbol: 'Rp ',
+                currencySymbolPlacement: 'p',
+                minimumValue: '0',
+                decimalPlaces: 0,
+                readOnly: true // Pastikan ini hanya untuk tampilan, tidak bisa diedit
+            });
+
+            // Hitung total harga otomatis saat jumlah atau harga berubah
+            function hitungTotal() {
+                let jumlah = parseInt($('#jumlah').val()) || 0;
+                let harga = autoNumericHarga.getNumber(); // Ambil angka dari AutoNumeric
+
+                let total = jumlah * harga; // Hitung total harga
+                autoNumericTotal.set(total); // Set nilai total ke input
+            }
+
+            // Event listener untuk perubahan jumlah & harga
+            $('#jumlah, #harga').on('input', function() {
+                hitungTotal();
+            });
+
+            // Bersihkan format harga sebelum form dikirim
+            $('form').on('submit', function() {
+                let hargaClean = autoNumericHarga.getNumber(); // Ambil angka bersih tanpa format
+                $('#harga').val(hargaClean); // Masukkan ke input hidden sebelum submit
             });
         });
     </script>

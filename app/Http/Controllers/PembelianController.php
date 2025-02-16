@@ -70,12 +70,13 @@ class PembelianController extends Controller
             'no_invoice' => 'required|min:8',
             'id_barang' => 'required|exists:data_barangs,id', // Pastikan barang ada
             'jumlah' => 'required|integer|min:1',
-            'harga' => 'required',
+            'harga' => 'required|string',
             'tanggal' => 'required|date',
             'keterangan' => 'nullable|min:6',
         ]);
 
-        $validated['harga'] = (int) str_replace(['.', ','], '', $validated['harga']);
+        // Konversi harga dari format AutoNumeric ke integer
+        $validated['harga'] = (int) str_replace(['Rp', '.', ','], '', trim($validated['harga']));
 
         if($validated['keterangan'] === "Dibatalkan" || $validated['keterangan'] === "dibatalkan"){
             return back()->with('failed','Keterangan tidak bisa ditambahkan');

@@ -62,14 +62,10 @@
                         
                         if (data) {
                             let lowerCaseData = data.toLowerCase(); // Konversi ke lowercase
-                            if (lowerCaseData.includes('disetujui')) {
-                                badgeClass = 'badge bg-success';
-                            } else if (lowerCaseData.includes('ditolak')) {
-                                badgeClass = 'badge bg-danger';
-                            } else if (lowerCaseData.includes('menunggu')) {
-                                badgeClass = 'badge bg-warning text-dark';
-                            } else if (lowerCaseData.includes('dibatalkan')) {
+                            if (lowerCaseData.includes('dibatalkan')) {
                                 badgeClass = 'badge bg-secondary';
+                            } else{
+                                badgeClass = 'badge bg-success';
                             }
                         }
 
