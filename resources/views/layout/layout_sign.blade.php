@@ -31,6 +31,10 @@
   <!--- sweet alert --->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <style>
+    /* Animasi transisi background lebih halus */
+    .fade-background {
+        transition: background-image 2s ease-in-out;
+    }
     .hide-mobile-invert{
       display: none !important;
     }
@@ -69,6 +73,25 @@
       }
       Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
     }
+
+    // Daftar gambar
+    const images = [
+        "https://lh5.googleusercontent.com/p/AF1QipOLsmHYTcVMEPW9VcjsLOE4R_oBX75apTyPOh1k=w408-h306-k-no",
+        "https://i0.wp.com/betanews.id/wp-content/uploads/2022/10/20221022_Betanews_Rokok-Klobot-2.jpg?fit=600%2C350&ssl=1",
+        "https://images.murianews.com/data/2023/11/image-20231128013422.jpeg",
+        "https://asset-2.tstatic.net/jateng/foto/bank/images/bantuan-perusahaan-rokok-sukun.jpg",
+        "https://asset.kompas.com/crops/knV6aaEB5IjnlN77Ej2rvAYx23k=/0x15:1361x922/750x500/data/photo/2020/11/09/5fa96fed226cd.jpeg"
+    ];
+
+    let currentImageIndex = 0;
+
+    function changeBackground() {
+        currentImageIndex = (currentImageIndex + 1) % images.length;
+        document.getElementById("imageContainer").style.backgroundImage = `url('${images[currentImageIndex]}')`;
+    }
+
+    // Ganti gambar setiap 10 detik
+    setInterval(changeBackground, 10000);
   </script>
   <!-- Github buttons -->
   <script async src="https://buttons.github.io/buttons.js"></script>
