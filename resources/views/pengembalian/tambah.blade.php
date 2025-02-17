@@ -104,7 +104,7 @@
                         <!-- Tombol Simpan -->
                         <div class="text-left">
                             <button type="submit" class="btn btn-success mt-3 btn-mobile">
-                                <i class="bi bi-save"></i> Simpan Peminjaman
+                                <i class="bi bi-save"></i> Simpan Pengembalian
                             </button>
                         </div>
                     </form>                    

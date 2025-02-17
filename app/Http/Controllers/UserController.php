@@ -146,17 +146,21 @@ class UserController extends Controller
             'password' => 'required|min:6',
         ]);
 
-        // Mencoba login dengan email, password, dan remember
+        // Coba login menggunakan email dan password
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            // Redirect ke dashboard setelah login sukses
+            // Redirect ke dashboard jika login berhasil
             return redirect()->route('dashboard')->with('success', 'Login berhasil!');
-        } else {
-            // Jika login gagal
-            session()->flash('failed', 'Email / Password Salah.');
-            return redirect()->route('login')->with('failed', 'Email / Password Salah.');
+        }else if (!User::where('email', $request->email)->exists()) {
+            //cek apakah email ada
+            return back()->with('failed', 'Email / Pasword Salah!');
+        }else if (!User::where('password', $request->password)->exists()) {
+            //cek apakah password ada
+            return back()->with('failed', 'Email / Pasword Salah!');
         }
-    }
 
+        // Jika email ada tetapi password salah
+        return back()->with('failed', 'Email / Pasword Salah!');
+    }
 
     // Logout
     public function logout(Request $request)
