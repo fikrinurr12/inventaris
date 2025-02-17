@@ -1,8 +1,8 @@
 @extends('layout.layout_utama')
-@section('title','Edit User')
+@section('title','Data Pengguna')
 
 @section('content')
-@section('pages','Edit User')
+@section('pages','Data Pengguna')
 <div class="container-fluid py-4">
     <div>
         <a href="{{ route('data_pengguna') }}" class="btn btn-primary btn-md btn-mobile">

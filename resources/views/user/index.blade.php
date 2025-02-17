@@ -1,8 +1,8 @@
 @extends('layout.layout_utama')
-@section('title','Master User')
+@section('title','Data Pengguna')
 
 @section('content')
-@section('pages','Master User')
+@section('pages','Data Pengguna')
 
 @push('scripts_css')
     <link rel="stylesheet" href="https://cdn.datatables.net/2.2.1/css/dataTables.dataTables.css" />
