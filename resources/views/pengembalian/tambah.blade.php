@@ -1,8 +1,8 @@
 @extends('layout.layout_utama')
-@section('title', 'Peminjaman')
+@section('title', 'Pengembalian')
 
 @section('content')
-@section('pages', 'Peminjaman')
+@section('pages', 'Pengembalian')
 
 <div class="container-fluid py-4">
     <!-- Tombol Kembali -->

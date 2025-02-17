@@ -61,7 +61,7 @@
                         <!-- Input Keterangan -->
                         <div class="form-group">
                             <label for="keterangan" class="form-label">Keterangan</label>
-                            <input type="text" id="keterangan" name="keterangan" class="form-control">
+                            <input type="text" id="keterangan" name="keterangan" class="form-control" required>
                             @error('keterangan')
                                 <div class="text-danger text-sm mt-1">{{ $message }}</div>
                             @enderror
