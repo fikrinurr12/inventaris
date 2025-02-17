@@ -31,7 +31,7 @@ class UserController extends Controller
 
         // Data saat ini untuk superadmin dan admin
         $totalUser = User::count();
-        $totalProduk = DataBarang::sum('stok_total_baik');
+        $totalProduk = DataBarang::sum('stok_tersedia');
         $totalRusak = DataBarang::sum('stok_total_rusak');
         $totalPeminjaman = Peminjaman::where('keterangan', 'Disetujui')->sum('sisa_pinjam');
 
