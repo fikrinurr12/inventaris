@@ -143,7 +143,7 @@ class UserController extends Controller
         // Validasi input
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required|min:6',
+            'password' => 'required',
         ]);
 
         // Coba login menggunakan email dan password
