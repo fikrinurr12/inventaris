@@ -11,15 +11,24 @@
         <div class="card-body">
             <form id="filterForm">
                 <div class="row g-3 align-items-end">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="tanggal" class="form-label fw-semibold">Tanggal Transaksi</label>
                         <input type="text" name="tanggal" id="tanggal" class="form-control" placeholder="Pilih rentang tanggal">
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <label for="keterangan" class="form-label fw-semibold">Keterangan</label>
-                        <select name="keterangan" id="keterangan" class="form-select select-form">
+                        <select name="keterangan" id="keterangan" class="form-select">
                             <option value="">-- Semua --</option>
                             <option value="Dibatalkan">Dibatalkan</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="id_supplier" class="form-label fw-semibold">Supplier</label>
+                        <select name="id_supplier" id="id_supplier" class="form-select select-form">
+                            <option value="">-- Semua --</option>
+                            @foreach($supplierList as $s)
+                                <option value="{{ $s->id }}">{{ $s->nama }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>      
@@ -41,6 +50,7 @@
                     <tr>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">No. Transaksi</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Nama Barang</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Nama Supplier</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Tanggal Transaksi</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">No Invoice</th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Jumlah</th>
@@ -57,6 +67,9 @@
 
 <script>
     $(document).ready(function() {
+        $('.select-form').select2({
+            theme: 'bootstrap-5',
+        });
 
         // Inisialisasi Date Range Picker
         $('#tanggal').daterangepicker({
@@ -119,11 +132,13 @@
                 data: function(d) {
                     d.tanggal = $('#tanggal').val();
                     d.keterangan = $('#keterangan').val();
+                    d.id_supplier = $('#id_supplier').val();
                 }
             },
             columns: [
                 { data: 'no_transaksi', name: 'no_transaksi' },
                 { data: 'nama_barang', name: 'nama_barang' },
+                { data: 'nama_supplier', name: 'nama_supplier' },
                 { data: 'tgl_transaksi', name: 'tgl_transaksi' },
                 { data: 'no_invoice', name: 'no_invoice' },
                 { data: 'jumlah', name: 'jumlah' },

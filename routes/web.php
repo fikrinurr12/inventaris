@@ -9,6 +9,7 @@ use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PengembalianController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PenyesuaianStokController;
+use App\Http\Controllers\MasterSupplierController;
 
 use App\Models\Peminjaman;
 
@@ -61,6 +62,14 @@ Route::group(['middleware' => ['role:superadmin|admin']], function () {
     Route::put('/kategori/edit_kategori/update/{id}', [KategoriController::class, 'update'])->name('edit_kategori.store');
     Route::delete('/kategori/hapus_kategori/{id}', [KategoriController::class, 'hapus'])->name('hapus_kategori');
 
+    //Master Supplier
+    Route::get('/supplier', [MasterSupplierController::class, 'index'])->name('supplier');
+    Route::get('/supplier/tambah', [MasterSupplierController::class, 'tambah'])->name('tambah_supplier');
+    Route::post('/supplier/tambah/store', [MasterSupplierController::class, 'store'])->name('supplier.store');
+    Route::get('/supplier/edit_supplier/{id}', [MasterSupplierController::class, 'edit'])->name('edit_supplier');
+    Route::put('/supplier/edit_supplier/update/{id}', [MasterSupplierController::class, 'update'])->name('edit_supplier.store');
+    Route::delete('/supplier/hapus_supplier/{id}', [MasterSupplierController::class, 'hapus'])->name('hapus_supplier');
+    
     //Master Pembelian
     Route::get('/pembelian', [PembelianController::class, 'index'])->name('pembelian');
     Route::get('/pembelian/tambah_pembelian', [PembelianController::class, 'tambah'])->name('tambah_pembelian');

@@ -15,7 +15,7 @@ class PenyesuaianStokController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $dataPenyesuaian = PenyesuaianStok::with('barang')->select('penyesuaian_stok.*');
+            $dataPenyesuaian = PenyesuaianStok::with('barang')->select('penyesuaian_stok.*')->orderBy('updated_at', 'desc');
 
             return DataTables::of($dataPenyesuaian)
                 ->addColumn('kode_barang', function ($row) {

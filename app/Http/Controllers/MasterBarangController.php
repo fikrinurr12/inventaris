@@ -17,7 +17,7 @@ class MasterBarangController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $dataBarang = DataBarang::with('kategori')->select('data_barangs.*');
+            $dataBarang = DataBarang::with('kategori')->select('data_barangs.*')->orderBy('updated_at', 'desc');
 
             return DataTables::of($dataBarang)
                 ->addColumn('kategori', function ($row) {

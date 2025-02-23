@@ -326,6 +326,14 @@
         </li>
         @role('superadmin|admin')
         <li class="nav-item">
+          <a class="nav-link {{ Request::is('supplier*') ? 'active' : '' }}" href="{{ route('supplier') }}">
+            <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="bi bi-truck text-dark text-sm opacity-10"></i> <!-- Ikon Master supllier -->
+            </div>
+            <span class="nav-link-text ms-1">Master Supplier</span>
+          </a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link {{ Request::is('pembelian*') ? 'active' : '' }}" href="{{ route('pembelian') }}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="bi bi-cart4 text-dark text-sm opacity-10"></i> <!-- Ikon Pembelian -->

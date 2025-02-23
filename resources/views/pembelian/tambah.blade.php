@@ -28,6 +28,20 @@
                                 <div class="text-danger text-sm mt-1">{{ $message }}</div>
                             @enderror
                         </div>
+
+                        <!-- Input supplier -->
+                        <div class="form-group">
+                            <label for="id_supplier" class="form-label">Supplier</label>
+                            <select id="id_supplier" name="id_supplier" class="form-control select-form" required>
+                                <option value="" disabled selected>-- Pilih Supplier --</option>
+                                @foreach($dataSupplier as $supplier)
+                                    <option value="{{ $supplier->id }}">{{ $supplier->nama }}</option>
+                                @endforeach
+                            </select>
+                            @error('id_supplier')
+                                <div class="text-danger text-sm mt-1">{{ $message }}</div>
+                            @enderror
+                        </div>
                     
                         <!-- Input Barang -->
                         <div class="form-group">

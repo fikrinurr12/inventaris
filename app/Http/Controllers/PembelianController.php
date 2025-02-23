@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\DataBarang;
 use App\Models\Pembelian;
+use App\Models\Supplier;
 use Carbon\Carbon;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -12,14 +13,17 @@ class PembelianController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $pembelian = Pembelian::with('barang');
-    
+            $pembelian = Pembelian::with(['barang', 'supplier'])->orderBy('updated_at', 'desc'); // Load relasi supplier
+
             return DataTables::of($pembelian)
                 ->addColumn('kode_barang', function ($row) {
                     return $row->barang->kode ?? 'Tidak ada Kode Barang';
                 })
                 ->addColumn('nama_barang', function ($row) {
                     return $row->barang->nama ?? '-';
+                })
+                ->addColumn('supplier', function ($row) {
+                    return $row->supplier->nama ?? '-';
                 })
                 ->editColumn('harga', function ($row) {
                     return 'Rp. ' . number_format($row->harga, 0, ',', '.');
@@ -45,7 +49,7 @@ class PembelianController extends Controller
                                         <i class="fas fa-print"></i>
                                     </a>';
                     }
-    
+
                     return $buttons;
                 })
                 ->rawColumns(['aksi'])
@@ -58,8 +62,9 @@ class PembelianController extends Controller
     {
         // Ambil data barang untuk ditampilkan di form pembelian
         $dataBarang = DataBarang::all(); // Menampilkan semua data barang
+        $dataSupplier = Supplier::all();
 
-        return view('pembelian.tambah', compact('dataBarang'));
+        return view('pembelian.tambah', compact('dataBarang','dataSupplier'));
     }
 
     // Fungsi untuk menyimpan pembelian
@@ -69,6 +74,7 @@ class PembelianController extends Controller
         $validated = $request->validate([
             'no_invoice' => 'required|min:8',
             'id_barang' => 'required|exists:data_barangs,id', // Pastikan barang ada
+            'id_supplier' => 'required|exists:suppliers,id', // Pastikan supplier ada
             'jumlah' => 'required|integer|min:1',
             'harga' => 'required|string',
             'tanggal' => 'required|date',
@@ -85,12 +91,16 @@ class PembelianController extends Controller
         // Ambil barang berdasarkan kode
         $barang = DataBarang::where('id', $validated['id_barang'])->first();
 
+        // Ambil supplier berdasarkan kode
+        $supplier = Supplier::where('id', $validated['id_supplier'])->first();
+
         // Menyimpan data pembelian
         $pembelian = Pembelian::create([
             'no_transaksi' => 'TRXPB' . Carbon::now()->timestamp, // Generate no transaksi
             'tgl_transaksi' => $validated['tanggal'],
             'no_invoice' => $validated['no_invoice'],
             'id_barang' => $validated['id_barang'],
+            'supplier_id' => $validated['id_supplier'],
             'jumlah' => $validated['jumlah'],
             'harga' => $validated['harga'],
             'keterangan' => $validated['keterangan'],

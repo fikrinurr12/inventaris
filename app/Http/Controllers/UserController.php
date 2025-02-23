@@ -179,7 +179,7 @@ class UserController extends Controller
         $user = auth()->user();
 
         if ($request->ajax()) {
-            $query = User::query();
+            $query = User::query()->orderBy('updated_at', 'desc');
 
             if (!$user->hasRole('superadmin')) {
                 $query->whereHas('roles', function ($q) {

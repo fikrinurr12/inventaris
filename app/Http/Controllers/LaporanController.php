@@ -9,6 +9,7 @@ use App\Models\Pembelian;
 use App\Models\Pengembalian;
 use App\Models\Kategori;
 use App\Models\PenyesuaianStok;
+use App\Models\Supplier;
 
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -64,12 +65,13 @@ class LaporanController extends Controller
     //laporan pembelian
     public function laporanPembelian()
     {
-        return view('laporan.pembelian.index');
+        $supplierList = Supplier::all();
+        return view('laporan.pembelian.index', compact('supplierList'));
     }
 
     public function getDataPembelian(Request $request)
     {
-        $query = Pembelian::with('barang')->orderBy('tgl_transaksi', 'desc');
+        $query = Pembelian::with(['barang', 'supplier'])->orderBy('tgl_transaksi', 'desc');
 
         // Filter berdasarkan tanggal transaksi (jika dipilih)
         if ($request->filled('tanggal')) {
@@ -90,9 +92,17 @@ class LaporanController extends Controller
             $query->where('keterangan', 'like', $request->keterangan);
         }
 
+        // Filter berdasarkan ID supplier
+        if ($request->filled('id_supplier')) {
+            $query->where('supplier_id', $request->id_supplier);
+        }
+
         return DataTables::eloquent($query)
             ->addColumn('nama_barang', function ($pembelian) {
                 return $pembelian->barang ? $pembelian->barang->nama : '-';
+            })
+            ->addColumn('nama_supplier', function ($pembelian) {
+                return $pembelian->supplier ? $pembelian->supplier->nama : '-';
             })
             ->editColumn('tgl_transaksi', function ($pembelian) {
                 return Carbon::parse($pembelian->tgl_transaksi)->format('d-m-Y');
@@ -100,7 +110,7 @@ class LaporanController extends Controller
             ->editColumn('harga', function ($pembelian) {
                 return 'Rp ' . number_format($pembelian->harga, 0, ',', '.');
             })
-            ->rawColumns(['nama_barang'])
+            ->rawColumns(['nama_barang','nama_supplier'])
             ->toJson();
     }
 

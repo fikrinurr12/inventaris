@@ -16,6 +16,7 @@
     <p>No Transaksi: {{ $pembelian->no_transaksi }}</p>
     <p>Tanggal: {{ $pembelian->tgl_transaksi }}</p>
     <p>No Invoice: {{ $pembelian->no_invoice }}</p>
+    <p>Supplier: {{ $pembelian->supplier->nama }}</p>
     
     <table class="table">
         <thead>

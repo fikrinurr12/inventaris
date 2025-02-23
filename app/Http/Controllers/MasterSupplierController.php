@@ -3,20 +3,21 @@
 namespace App\Http\Controllers;
 use Yajra\DataTables\Facades\DataTables;
 
-use App\Models\Kategori;
+use App\Models\Supplier;
+
 use Illuminate\Http\Request;
 
-class KategoriController extends Controller
+class MasterSupplierController extends Controller
 {
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $kategori = Kategori::select('id', 'nama')->orderBy('updated_at', 'desc');
+            $supplier = Supplier::select('id', 'nama','no_telepon','alamat')->orderBy('updated_at', 'desc');
     
-            return DataTables::of($kategori)
+            return DataTables::of($supplier)
                 ->addColumn('aksi', function ($row) {
-                    $editUrl = route('edit_kategori', $row->id);
-                    $deleteUrl = route('hapus_kategori', $row->id);
+                    $editUrl = route('edit_supplier', $row->id);
+                    $deleteUrl = route('hapus_supplier', $row->id);
                     
                     return '
                         <a href="'.$editUrl.'" class="btn btn-warning btn-sm square-btn">
@@ -34,60 +35,70 @@ class KategoriController extends Controller
                 ->make(true);
         }
 
-        return view('kategori.index');
+        return view('master_supplier.index');
     }
 
     public function tambah()
     {
-        return view('kategori.tambah');
+        return view('master_supplier.tambah');
     }
 
     public function store(Request $request)
     {
-        // Validasi input untuk memastikan nama kategori unik
+        // Validasi input
         $request->validate([
-            'nama' => 'required|string|max:255|unique:kategoris,nama',
+            'nama' => 'required|string|max:255|unique:suppliers,nama',
+            'no_telepon' => 'nullable|string|max:15',
+            'alamat' => 'nullable|string',
         ]);
 
-        // Menambahkan kategori baru ke database
-        Kategori::create([
-            'nama' => $request->nama
+        // Simpan data supplier
+        Supplier::create([
+            'nama' => $request->nama,
+            'no_telepon' => $request->no_telepon,
+            'alamat' => $request->alamat,
         ]);
 
         // Redirect dengan pesan sukses
-        return redirect()->route('kategori')->with('success', 'Kategori berhasil ditambahkan.');
+        return redirect()->route('supplier')->with('success', 'Supplier berhasil ditambahkan.');
     }
 
     public function edit($id)
     {
-        $kategori = Kategori::findOrFail($id);
-        return view('kategori.edit', compact('kategori'));
+        $supplier = Supplier::findOrFail($id);
+        return view('master_supplier.edit', compact('supplier'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'nama' => 'required|string|max:255|unique:kategoris,nama,' . $id,
+            'nama' => 'required|string|max:255|unique:suppliers,nama,' . $id,
+            'no_telepon' => 'nullable|string|max:15',
+            'alamat' => 'nullable|string',
         ]);
 
-        $kategori = Kategori::findOrFail($id);
-        $kategori->update(['nama' => $request->nama]);
+        $supplier = Supplier::findOrFail($id);
+        $supplier->update([
+            'nama' => $request->nama,
+            'no_telepon' => $request->no_telepon,
+            'alamat' => $request->alamat,
+        ]);
 
-        return redirect()->route('kategori')->with('success', 'Kategori berhasil diperbarui.');
+        return redirect()->route('supplier')->with('success', 'Supplier berhasil diperbarui.');
     }
 
     public function hapus($id)
     {
-        $kategori = Kategori::findOrFail($id);
+        $supplier = Supplier::findOrFail($id);
 
         // Cek apakah kategori memiliki barang terkait
-        if (!$kategori->canBeDeleted()) {
-            return redirect()->route('kategori')->with('failed', 'Kategori tidak dapat dihapus karena masih memiliki barang terkait.');
+        if (!$supplier->canBeDeleted()) {
+            return redirect()->route('supplier')->with('failed', 'Supplier tidak dapat dihapus karena masih memiliki pembelian terkait.');
         }
 
-        $kategori->delete();
+        $supplier->delete();
 
-        return redirect()->route('kategori')->with('success', 'Kategori berhasil dihapus.');
+        return redirect()->route('supplier')->with('success', 'Supplier berhasil dihapus.');
     }
 
     public function storeAjax(Request $request)
@@ -113,6 +124,4 @@ class KategoriController extends Controller
             ], 400);
         }
     }
-
 }
-

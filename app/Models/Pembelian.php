@@ -18,11 +18,17 @@ class Pembelian extends Model
         'no_invoice',
         'jumlah', 
         'harga', 
-        'keterangan'
+        'keterangan',
+        'supplier_id'
     ];
 
     public function barang()
     {
         return $this->belongsTo(DataBarang::class, 'id_barang', 'id');
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo(Supplier::class, 'supplier_id', 'id');
     }
 }

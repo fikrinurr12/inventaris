@@ -18,6 +18,7 @@
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">No Transaksi</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Tanggal</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">No Invoice</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Supplier</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Kode Barang</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Nama Barang</th>
                   <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Jumlah</th>
@@ -50,6 +51,7 @@
                 { data: 'no_transaksi', name: 'no_transaksi' },
                 { data: 'tgl_transaksi', name: 'tgl_transaksi' },
                 { data: 'no_invoice', name: 'no_invoice' },
+                { data: 'supplier', name: 'supplier' },
                 { data: 'kode_barang', name: 'kode_barang' },
                 { data: 'nama_barang', name: 'nama_barang' },
                 { data: 'jumlah', name: 'jumlah' },
