@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('pembelians', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_barang')->constrained('data_barangs')->onDelete('cascade');
+            $table->foreignId('supplier_id')->nullable()->constrained('suppliers')->onDelete('set null');
             $table->string('no_transaksi')->unique();
             $table->date('tgl_transaksi');
             $table->string('no_invoice');

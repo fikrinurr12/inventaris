@@ -18,20 +18,10 @@ return new class extends Migration
             $table->text('alamat')->nullable();
             $table->timestamps();
         });
-
-        // Tambahkan supplier_id ke tabel pembelians
-        Schema::table('pembelians', function (Blueprint $table) {
-            $table->foreignId('supplier_id')->nullable()->constrained('suppliers')->onDelete('set null');
-        });
     }
 
     public function down(): void
     {
-        Schema::table('pembelians', function (Blueprint $table) {
-            $table->dropForeign(['supplier_id']);
-            $table->dropColumn('supplier_id');
-        });
-
         Schema::dropIfExists('suppliers');
     }
 };

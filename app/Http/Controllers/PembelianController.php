@@ -110,7 +110,6 @@ class PembelianController extends Controller
         $barang->harga_terakhir = $validated['harga']; // Update harga terakhir
         $barang->stok_total_baik += $validated['jumlah']; // Tambah stok barang yang baik
         $barang->stok_tersedia += $validated['jumlah']; // Tambah stok yang tersedia
-        $barang->keterangan = $validated['keterangan']; // Tambah keterangan yang tersedia
         $barang->save(); // Simpan perubahan ke database
 
         // Redirect setelah berhasil
