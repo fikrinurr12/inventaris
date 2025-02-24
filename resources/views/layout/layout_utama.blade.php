@@ -139,6 +139,10 @@
         top: .0rem !important;
     }
 
+    .sidenav-header.sticky-top.d-flex.align-items-center.justify-content-between.bg-sidebar-top {
+        background: white !important;
+    }
+
     /* Mobile fixed navbar styles */
     @media (max-width: 900.98px) {
       .hide-mobile{
@@ -239,7 +243,7 @@
 
   <div class="min-height-300 bg-dark position-absolute w-100"></div>
   <aside class="sidenav bg-white navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-4 shadow-sm" id="sidenav-main">
-    <div class="sidenav-header d-flex align-items-center justify-content-between">
+    <div class="sidenav-header sticky-top d-flex align-items-center justify-content-between bg-sidebar-top">
       <a class="navbar-brand d-flex align-items-center m-0" href="{{ route('dashboard') }}">
         @php
           $logo = request()->isSecure() ? secure_asset('assets/img/logos/Sukun_Mc_Wartono.jpeg') : asset('assets/img/logos/Sukun_Mc_Wartono.jpeg');
@@ -385,7 +389,7 @@
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Report</h6>
         </li>
         <li class="nav-item">
-          <a class="nav-link d-flex align-items-center" data-bs-toggle="collapse" href="#menuLaporan"
+          <a class="nav-link d-flex align-items-center" id="laporanClick" data-bs-toggle="collapse" href="#menuLaporan"
              role="button" aria-expanded="{{ $isLaporanActive ? 'true' : 'false' }}" aria-controls="menuLaporan">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                   <i class="bi bi-bar-chart-line text-dark text-sm opacity-10"></i>
@@ -428,7 +432,7 @@
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Manajemen Pengguna</h6>
         </li>
-        <li class="nav-item">
+        <li class="nav-item mb-3">
           <a class="nav-link {{ Request::is('data_pengguna*') ? 'active' : '' }}" href="{{ route('data_pengguna') }}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="bi bi-people text-dark text-sm opacity-10"></i> <!-- Ikon Data Pengguna -->
@@ -575,6 +579,22 @@
             
             $(this).toggleClass("active"); // Tambah/hapus class active
         });
+
+        var sidenav = $(".sidenav"); // Pastikan ini adalah div yang bisa di-scroll
+        var activeMenu = $(".nav-link.active");
+        var menuLaporan = $("#menuLaporan");
+
+        if (activeMenu.length) {
+            sidenav.animate({
+                scrollTop: activeMenu.position().top + sidenav.scrollTop() - sidenav.height() / 2
+            }, 500);
+        }
+
+        // Ketika menu laporan diklik, scroll ke bawah
+        $("#laporanClick").click(function () {
+            sidenav.animate({ scrollTop: menuLaporan[0].scrollHeight }, 500);
+        });
+
     });
 
     document.addEventListener("DOMContentLoaded", function () {
