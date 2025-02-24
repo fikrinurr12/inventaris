@@ -92,7 +92,7 @@ $(document).ready( function () {
 
     // SweetAlert untuk tombol "Lihat"
     $(document).on("click", ".btn-lihat-keterangan", function () {
-        var keterangan = $(this).data("keterangan");
+        var nama = $(this).data("nama");
         var harga = $(this).data("harga");
         var spesifikasi = $(this).data("spesifikasi");
         var stok_baik = $(this).data("stok_baik");
@@ -107,7 +107,7 @@ $(document).ready( function () {
                         <img src="${foto}" alt="Foto Barang" class="rounded w-100" style="object-fit: cover; aspect-ratio: 1;">
                     </div>
                     <div class="text-start flex-grow-1">
-                        <h6 class="mb-2 fw-semibold text-sm">${keterangan}</h6>
+                        <h6 class="mb-2 fw-semibold text-sm">${nama}</h6>
                         <div class="mb-2">
                             <div class="text-muted small text-sm">Harga:</div>
                             <div class="fw-medium text-sm">Rp ${parseInt(harga).toLocaleString('id-ID')}</div>

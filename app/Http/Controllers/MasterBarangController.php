@@ -26,6 +26,7 @@ class MasterBarangController extends Controller
                 ->addColumn('keterangan', function ($row) {
                     return '<button 
                                 class="btn btn-outline-info btn-sm btn-lihat-keterangan square-btn" 
+                                data-nama="'.$row->nama.'"
                                 data-foto="'.$row->foto.'"
                                 data-keterangan="'.$row->keterangan.'" 
                                 data-harga="'.$row->harga_terakhir.'"
