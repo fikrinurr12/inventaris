@@ -49,13 +49,37 @@
                 </div>
               </div>
             </div>
-            <div class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
-              <div id="imageContainer" class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden" 
-                  style="background-image: url('https://lh5.googleusercontent.com/p/AF1QipOLsmHYTcVMEPW9VcjsLOE4R_oBX75apTyPOh1k=w408-h306-k-no'); 
-                  background-size: cover; transition: background-image 1s ease-in-out;">
-                  <span class="mask bg-gradient-primary opacity-3"></span>
-                  <h4 class="mt-5 text-white font-weight-bolder position-relative">"Urip Iku Urup"</h4>
-                  <p class="text-white position-relative">kita dilahirkan di dunia ini bukan untuk berdiri sendiri, berkuasa dan semua hanya untuk diri sendiri, akan tetapi kita lahir untuk saling memberi, saling menolong dan saling membantu sesama tanpa ada rasa pamrih..</p>
+            <div class="col-lg-6 col-md-12 d-lg-flex d-none h-100 pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
+                <div id="imageCarousel" class="carousel slide w-100 h-100 border-radius-lg position-relative" data-bs-ride="carousel" data-bs-interval="5000">
+                    
+                    <!-- Overlay Teks -->
+                    <div class="position-absolute w-100 h-100 d-flex flex-column justify-content-center align-items-center text-center px-5 text-white" style="z-index: 2;">
+                      <div class="overlay-bg w-100 h-100 position-absolute"></div>
+                      <div class="position-relative z-3">
+                          <h1 class="font-weight-bolder text-white custom-font">"Urip Iku Urup"</h1>
+                          <p class="mb-0">Kita dilahirkan di dunia ini bukan untuk berdiri sendiri, berkuasa, dan semua hanya untuk diri sendiri. Akan tetapi, kita lahir untuk saling memberi, saling menolong, dan saling membantu sesama tanpa ada rasa pamrih.</p>
+                      </div>
+                    </div>
+            
+                    <!-- Carousel Gambar -->
+                    <div class="carousel-inner w-100 h-100">
+                        <div class="carousel-item active w-100 h-100">
+                            <div class="d-block w-100 h-100 bg-cover" style="background-image: url('https://lh5.googleusercontent.com/p/AF1QipOLsmHYTcVMEPW9VcjsLOE4R_oBX75apTyPOh1k=w408-h306-k-no');"></div>
+                        </div>
+                        <div class="carousel-item w-100 h-100">
+                            <div class="d-block w-100 h-100 bg-cover" style="background-image: url('https://i0.wp.com/betanews.id/wp-content/uploads/2022/10/20221022_Betanews_Rokok-Klobot-2.jpg?fit=600%2C350&ssl=1');"></div>
+                        </div>
+                        <div class="carousel-item w-100 h-100">
+                            <div class="d-block w-100 h-100 bg-cover" style="background-image: url('https://images.murianews.com/data/2023/11/image-20231128013422.jpeg');"></div>
+                        </div>
+                        <div class="carousel-item w-100 h-100">
+                            <div class="d-block w-100 h-100 bg-cover" style="background-image: url('https://asset-2.tstatic.net/jateng/foto/bank/images/bantuan-perusahaan-rokok-sukun.jpg');"></div>
+                        </div>
+                        <div class="carousel-item w-100 h-100">
+                            <div class="d-block w-100 h-100 bg-cover" style="background-image: url('https://asset.kompas.com/crops/knV6aaEB5IjnlN77Ej2rvAYx23k=/0x15:1361x922/750x500/data/photo/2020/11/09/5fa96fed226cd.jpeg');"></div>
+                        </div>
+                    </div>
+                </div>
               </div>
             </div>
           </div>
@@ -63,25 +87,4 @@
       </div>
     </section>
   </main>
-
-  <script>
-    // Daftar gambar
-    const images = [
-        "https://lh5.googleusercontent.com/p/AF1QipOLsmHYTcVMEPW9VcjsLOE4R_oBX75apTyPOh1k=w408-h306-k-no",
-        "https://i0.wp.com/betanews.id/wp-content/uploads/2022/10/20221022_Betanews_Rokok-Klobot-2.jpg?fit=600%2C350&ssl=1",
-        "https://images.murianews.com/data/2023/11/image-20231128013422.jpeg",
-        "https://asset-2.tstatic.net/jateng/foto/bank/images/bantuan-perusahaan-rokok-sukun.jpg",
-        "https://asset.kompas.com/crops/knV6aaEB5IjnlN77Ej2rvAYx23k=/0x15:1361x922/750x500/data/photo/2020/11/09/5fa96fed226cd.jpeg"
-    ];
-
-    let currentImageIndex = 0;
-
-    function changeBackground() {
-        currentImageIndex = (currentImageIndex + 1) % images.length;
-        document.getElementById("imageContainer").style.backgroundImage = `url('${images[currentImageIndex]}')`;
-    }
-
-    // Ganti gambar setiap 5 detik
-    setInterval(changeBackground, 5000);
-  </script>
 @endsection
