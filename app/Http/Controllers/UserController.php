@@ -90,11 +90,11 @@ class UserController extends Controller
         ->setHeight(250) // Atur tinggi chart
         ->setDataset([
             [
-                'name' => "Peminjaman Tahun $tahunSekarang",
+                'name' => "Peminjaman",
                 'data' => $chartDataPeminjaman // Data Peminjaman
             ],
             [
-                'name' => "Pengembalian Tahun $tahunSekarang",
+                'name' => "Pengembalian",
                 'data' => $chartDataPengembalian // Data Pengembalian
             ]
         ])
