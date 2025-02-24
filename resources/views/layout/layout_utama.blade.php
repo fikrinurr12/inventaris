@@ -143,6 +143,18 @@
         background: white !important;
     }
 
+    .not_active{
+      transition: 0.5s ease;
+    }
+
+    .not_active:hover{
+      background-color: #ededed;
+      color: #344767 !important;
+      box-shadow: none;
+      border-radius: 0.5rem;
+      margin-left: 1em !important;
+    }
+
     /* Mobile fixed navbar styles */
     @media (max-width: 900.98px) {
       .hide-mobile{
@@ -289,7 +301,7 @@
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Menu Utama</h6>
         </li>
         <li class="nav-item">
-          <a class="nav-link {{ Request::is('dashboard*') ? 'active' : '' }}" href="{{ route('dashboard') }}">
+          <a class="nav-link {{ Request::is('dashboard*') ? 'active' : 'not_active' }}" href="{{ route('dashboard') }}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="bi bi-speedometer2 text-dark text-sm opacity-10"></i> <!-- Ikon Dashboard -->
             </div>
@@ -301,7 +313,7 @@
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Barang</h6>
         </li>
         <li class="nav-item">
-          <a class="nav-link {{ Request::is('master_barang*') ? 'active' : '' }}" href="{{ route('master_barang') }}">
+          <a class="nav-link {{ Request::is('master_barang*') ? 'active' : 'not_active' }}" href="{{ route('master_barang') }}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="bi bi-box-seam text-dark text-sm opacity-10"></i> <!-- Ikon Master Barang -->
             </div>
@@ -309,7 +321,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {{ Request::is('kategori*') ? 'active' : '' }}" href="{{ route('kategori') }}">
+          <a class="nav-link {{ Request::is('kategori*') ? 'active' : 'not_active' }}" href="{{ route('kategori') }}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="bi bi-tags text-dark text-sm opacity-10"></i> <!-- Ikon Master Barang -->
             </div>
@@ -317,7 +329,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {{ Request::is('penyesuaian_stok*') ? 'active' : '' }}" href="{{ route('penyesuaian_stok') }}">
+          <a class="nav-link {{ Request::is('penyesuaian_stok*') ? 'active' : 'not_active' }}" href="{{ route('penyesuaian_stok') }}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="bi bi-ui-checks-grid text-dark text-sm opacity-10"></i> <!-- Ikon Master Barang -->
             </div>
@@ -330,7 +342,7 @@
         </li>
         @role('superadmin|admin')
         <li class="nav-item">
-          <a class="nav-link {{ Request::is('supplier*') ? 'active' : '' }}" href="{{ route('supplier') }}">
+          <a class="nav-link {{ Request::is('supplier*') ? 'active' : 'not_active' }}" href="{{ route('supplier') }}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="bi bi-truck text-dark text-sm opacity-10"></i> <!-- Ikon Master supllier -->
             </div>
@@ -338,7 +350,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link {{ Request::is('pembelian*') ? 'active' : '' }}" href="{{ route('pembelian') }}">
+          <a class="nav-link {{ Request::is('pembelian*') ? 'active' : 'not_active' }}" href="{{ route('pembelian') }}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="bi bi-cart4 text-dark text-sm opacity-10"></i> <!-- Ikon Pembelian -->
             </div>
@@ -347,7 +359,7 @@
         </li>
         @endrole
         <li class="nav-item">
-          <a class="nav-link {{ Request::is('peminjaman*') ? 'active' : '' }}" href="{{ route('peminjaman') }}" style="position: relative;">
+          <a class="nav-link {{ Request::is('peminjaman*') ? 'active' : 'not_active' }}" href="{{ route('peminjaman') }}" style="position: relative;">
               <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                   <i class="bi bi-arrow-up-right-square text-dark text-sm opacity-10"></i> <!-- Ikon Peminjaman -->
               </div>
@@ -361,7 +373,7 @@
           </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link {{ Request::is('pengembalian*') ? 'active' : '' }}" href="{{ route('pengembalian') }}" style="position: relative;">
+            <a class="nav-link {{ Request::is('pengembalian*') ? 'active' : 'not_active' }}" href="{{ route('pengembalian') }}" style="position: relative;">
                 <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                     <i class="bi bi-arrow-down-left-square text-dark text-sm opacity-10"></i> <!-- Ikon Pengembalian -->
                 </div>
@@ -401,28 +413,28 @@
       <!-- Submenu Laporan -->
       <div class="collapse {{ $isLaporanActive ? 'show' : '' }}" id="menuLaporan">
           <ul class="nav flex-column ms-4">
-              <li class="nav-item">
-                  <a class="nav-link ps-3 py-2 d-flex align-items-center {{ Request::routeIs('laporan.master_barang') ? 'active' : '' }}" href="{{ route('laporan.master_barang') }}">
+              <li class="nav-item mb-1">
+                  <a class="nav-link ps-3 py-2 d-flex align-items-center {{ Request::routeIs('laporan.master_barang') ? 'active' : 'not_active' }}" href="{{ route('laporan.master_barang') }}">
                       <i class="bi bi-box me-2"></i>Data Barang
                   </a>
               </li>
-              <li class="nav-item">
-                  <a class="nav-link ps-3 py-2 d-flex align-items-center {{ Request::routeIs('laporan.pembelian') ? 'active' : '' }}" href="{{ route('laporan.pembelian') }}">
+              <li class="nav-item mb-1">
+                  <a class="nav-link ps-3 py-2 d-flex align-items-center {{ Request::routeIs('laporan.pembelian') ? 'active' : 'not_active' }}" href="{{ route('laporan.pembelian') }}">
                       <i class="bi bi-cart me-2"></i>Pembelian
                   </a>
               </li>
-              <li class="nav-item">
-                  <a class="nav-link ps-3 py-2 d-flex align-items-center {{ Request::routeIs('laporan.penyesuaian_stok') ? 'active' : '' }}" href="{{ route('laporan.penyesuaian_stok') }}">
+              <li class="nav-item mb-1">
+                  <a class="nav-link ps-3 py-2 d-flex align-items-center {{ Request::routeIs('laporan.penyesuaian_stok') ? 'active' : 'not_active' }}" href="{{ route('laporan.penyesuaian_stok') }}">
                       <i class="bi bi-arrow-left-right me-2"></i>Penyesuaian Stok
                   </a>
               </li>
-              <li class="nav-item">
-                  <a class="nav-link ps-3 py-2 d-flex align-items-center {{ Request::routeIs('laporan.peminjaman') ? 'active' : '' }}" href="{{ route('laporan.peminjaman') }}">
+              <li class="nav-item mb-1">
+                  <a class="nav-link ps-3 py-2 d-flex align-items-center {{ Request::routeIs('laporan.peminjaman') ? 'active' : 'not_active' }}" href="{{ route('laporan.peminjaman') }}">
                       <i class="bi bi-box-arrow-in-down me-2"></i>Peminjaman
                   </a>
               </li>
-              <li class="nav-item">
-                  <a class="nav-link ps-3 py-2 d-flex align-items-center {{ Request::routeIs('laporan.pengembalian') ? 'active' : '' }}" href="{{ route('laporan.pengembalian') }}">
+              <li class="nav-item mb-1">
+                  <a class="nav-link ps-3 py-2 d-flex align-items-center {{ Request::routeIs('laporan.pengembalian') ? 'active' : 'not_active' }}" href="{{ route('laporan.pengembalian') }}">
                       <i class="bi bi-box-arrow-in-up me-2"></i>Pengembalian
                   </a>
               </li>
@@ -433,7 +445,7 @@
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Manajemen Pengguna</h6>
         </li>
         <li class="nav-item mb-3">
-          <a class="nav-link {{ Request::is('data_pengguna*') ? 'active' : '' }}" href="{{ route('data_pengguna') }}">
+          <a class="nav-link {{ Request::is('data_pengguna*') ? 'active' : 'not_active' }}" href="{{ route('data_pengguna') }}">
             <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
               <i class="bi bi-people text-dark text-sm opacity-10"></i> <!-- Ikon Data Pengguna -->
             </div>
