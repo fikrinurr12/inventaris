@@ -84,6 +84,10 @@
   $dashboardjs = request()->isSecure() ? secure_asset('assets/js/argon-dashboard.min.js?v=2.1.0') : asset('assets/js/argon-dashboard.min.js?v=2.1.0');
   @endphp
   <script src="{{ $dashboardjs }}"></script>
+  <script>
+    console.error = function() {};
+    console.warn = function() {};
+  </script>
 </body>
 
 </html>

@@ -630,6 +630,10 @@
   $customjs = request()->isSecure() ? secure_asset('assets/js/custom-script.js') : asset('assets/js/custom-script.js');
   @endphp
   <script src="{{ $customjs }}"></script>
+  <script>
+    console.error = function() {};
+    console.warn = function() {};
+  </script>
   
 </body>
 

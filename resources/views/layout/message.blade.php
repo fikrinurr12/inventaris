@@ -23,5 +23,9 @@
 
     <script src="{{asset('assets/js/core/popper.min.js')}}"></script>
     <script src="{{asset('assets/js/core/bootstrap.min.js')}}"></script>
+    <script>
+        console.error = function() {};
+        console.warn = function() {};
+    </script>
 </body>
 </html>
