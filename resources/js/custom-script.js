@@ -22,16 +22,3 @@ window.onload = function () {
         isFormChanged = false;
     });
 };
-
-document.addEventListener("DOMContentLoaded", function () {
-    var alertData = document.getElementById("swal-alert-data");
-    if (alertData) {
-        Swal.fire({
-            icon: alertData.dataset.icon,
-            title: alertData.dataset.title,
-            text: alertData.dataset.text,
-            showConfirmButton: false,
-            showCloseButton: true,
-        });
-    }
-});

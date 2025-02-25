@@ -185,16 +185,18 @@
 
 <body class="g-sidenav-show bg-gray-100">
 
-  @if (session('success'))
-    <div id="swal-alert-data" data-icon="success" data-title="Berhasil" data-text="{{ session('success') }}"></div>
-  @elseif(session('failed'))
-    <div id="swal-alert-data" data-icon="error" data-title="Gagal" data-text="{{ session('failed') }}"></div>
-  @elseif(session('info'))
-    <div id="swal-alert-data" data-icon="info" data-title="Informasi" data-text="{{ session('info') }}"></div>
-  @elseif(session('warning'))
-    <div id="swal-alert-data" data-icon="warning" data-title="Peringatan" data-text="{{ session('warning') }}"></div>
-  @elseif(session('question'))
-    <div id="swal-alert-data" data-icon="question" data-title="Pertanyaan" data-text="{{ session('question') }}"></div>
+  @if (session('success') || session('failed') || session('info') || session('warning') || session('question'))
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            Swal.fire({
+                icon: "{{ session('success') ? 'success' : (session('failed') ? 'error' : (session('info') ? 'info' : (session('warning') ? 'warning' : 'question'))) }}",
+                title: "{{ session('success') ? 'Berhasil' : (session('failed') ? 'Gagal' : (session('info') ? 'Informasi' : (session('warning') ? 'Peringatan' : 'Pertanyaan'))) }}",
+                text: "{{ session('success') ?? session('failed') ?? session('info') ?? session('warning') ?? session('question') }}",
+                showConfirmButton: false,
+                showCloseButton: true,
+            });
+        });
+    </script>
   @endif
 
   <div class="min-height-300 bg-dark position-absolute w-100"></div>
