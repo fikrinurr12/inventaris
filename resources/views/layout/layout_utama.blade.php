@@ -186,55 +186,15 @@
 <body class="g-sidenav-show bg-gray-100">
 
   @if (session('success'))
-    <script>
-        Swal.fire({
-            icon: 'success', // Menampilkan icon sukses
-            title: 'Berhasil',
-            text: '{{ session("success") }}',
-            showConfirmButton: false, // Menyembunyikan tombol OK
-            showCloseButton: true, // Menambahkan tombol "X" di pojok
-        });
-    </script>
+    <div id="swal-alert-data" data-icon="success" data-title="Berhasil" data-text="{{ session('success') }}"></div>
   @elseif(session('failed'))
-      <script>
-          Swal.fire({
-              icon: 'error', // Menampilkan icon error
-              title: 'Gagal',
-              text: '{{ session("failed") }}',
-              showConfirmButton: false,
-              showCloseButton: true,
-          });
-      </script>
+    <div id="swal-alert-data" data-icon="error" data-title="Gagal" data-text="{{ session('failed') }}"></div>
   @elseif(session('info'))
-      <script>
-          Swal.fire({
-              icon: 'info', // Menampilkan icon info
-              title: 'Informasi',
-              text: '{{ session("info") }}',
-              showConfirmButton: false,
-              showCloseButton: true,
-          });
-      </script>
+    <div id="swal-alert-data" data-icon="info" data-title="Informasi" data-text="{{ session('info') }}"></div>
   @elseif(session('warning'))
-      <script>
-          Swal.fire({
-              icon: 'warning', // Menampilkan icon peringatan
-              title: 'Peringatan',
-              text: '{{ session("warning") }}',
-              showConfirmButton: false,
-              showCloseButton: true,
-          });
-      </script>
+    <div id="swal-alert-data" data-icon="warning" data-title="Peringatan" data-text="{{ session('warning') }}"></div>
   @elseif(session('question'))
-      <script>
-          Swal.fire({
-              icon: 'question', // Menampilkan icon pertanyaan
-              title: 'Pertanyaan',
-              text: '{{ session("question") }}',
-              showConfirmButton: false,
-              showCloseButton: true,
-          });
-      </script>
+    <div id="swal-alert-data" data-icon="question" data-title="Pertanyaan" data-text="{{ session('question') }}"></div>
   @endif
 
   <div class="min-height-300 bg-dark position-absolute w-100"></div>
