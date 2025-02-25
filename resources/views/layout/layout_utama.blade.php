@@ -496,7 +496,7 @@
     </nav>
 
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/autoNumeric/1.9.46/autoNumeric.min.js"></script>
+    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/autoNumeric/1.9.46/autoNumeric.min.js"></script> --}}
 
     @stack('scripts_js')
     <!-- End Navbar -->
@@ -535,7 +535,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.js"></script>
 
   {{-- larapex chart --}}
-  <script src="https://cdn.jsdelivr.net/npm/larapex-chart@1.0.4/dist/larapexchart.min.js"></script>
+  {{-- <script src="https://cdn.jsdelivr.net/npm/larapex-chart@1.0.4/dist/larapexchart.min.js"></script> --}}
 
   {{-- rupiah format --}}
   <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script>
