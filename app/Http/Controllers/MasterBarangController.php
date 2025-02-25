@@ -152,8 +152,9 @@ class MasterBarangController extends Controller
     {
         $barang = DataBarang::findOrFail($id);
 
+        // Validasi input
         $validated = $request->validate([
-            'kode' => 'required|string|max:255|min:3|unique:data_barangs,kode,' . $id, // Kode unik tapi bisa tetap sama
+            'kode' => 'required|string|max:255|min:3|unique:data_barangs,kode,' . $id,
             'foto' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5012',
             'nama' => 'required|string|max:255|min:2',
             'merk' => 'required|string|max:255|min:2',
@@ -163,52 +164,40 @@ class MasterBarangController extends Controller
             'harga_terakhir' => 'required|numeric',
         ]);
 
+        // Proses upload foto jika ada
         if ($request->hasFile('foto')) {
             // Hapus foto lama jika ada
             if ($barang->foto) {
-                $publicId = pathinfo(parse_url($barang->foto, PHP_URL_PATH), PATHINFO_FILENAME);
-                Cloudinary::destroy('inventaris/' . $publicId);
+                try {
+                    $publicId = pathinfo(parse_url($barang->foto, PHP_URL_PATH), PATHINFO_FILENAME);
+                    Cloudinary::destroy('inventaris/' . $publicId);
+                } catch (\Exception $e) {
+                    return back()->with('failed', 'Gagal menghapus gambar lama.');
+                }
             }
-        
+
             $uploadedFile = $request->file('foto');
-        
-            // Jika ukuran file lebih dari 1MB, kompresi otomatis
-            if ($uploadedFile->getSize() > 1024 * 1024) {
-                $uploadResponse = Cloudinary::upload($uploadedFile->getRealPath(), [
-                    'folder' => 'inventaris',
-                    'quality' => 'auto:low',
-                    'format' => 'jpg'
-                ]);
-            } else {
-                $uploadResponse = Cloudinary::upload($uploadedFile->getRealPath(), [
-                    'folder' => 'inventaris'
-                ]);
+
+            try {
+                // Jika file lebih dari 1MB, kompresi otomatis
+                $uploadOptions = ['folder' => 'inventaris'];
+                if ($uploadedFile->getSize() > 1024 * 1024) {
+                    $uploadOptions['quality'] = 'auto:low';
+                    $uploadOptions['format'] = 'jpg';
+                }
+
+                $uploadResponse = Cloudinary::upload($uploadedFile->getRealPath(), $uploadOptions);
+                $validated['foto'] = $uploadResponse->getSecurePath();
+            } catch (\Exception $e) {
+                return back()->with('failed', 'Gagal mengunggah gambar ke Cloud.');
             }
-        
-            $validated['foto'] = $uploadResponse->getSecurePath();
-        }else if(!$request->hasFile('foto')){
-            // **Update data barang**
-            $barang->update($validated);
-            return redirect()->route('master_barang')->with('success', 'Barang berhasil diperbarui!');
-        }else{
-            return back()->with('failed', 'Gagal mengunggah gambar ke Cloud.');
         }
 
-        // // **Proses update foto jika ada**
-        // if ($request->hasFile('foto')) {
-        //     // Hapus foto lama jika ada
-        //     if ($barang->foto && file_exists(public_path($barang->foto))) {
-        //         unlink(public_path($barang->foto));
-        //     }
-            
-        //     // Simpan foto baru
-        //     $foto = $request->file('foto');
-        //     $fotoName = time() . '.' . $foto->getClientOriginalExtension();
-        //     $foto->move(public_path('assets/img/upload'), $fotoName);
-        //     $validated['foto'] = 'assets/img/upload/' . $fotoName;
-        // }
-    }
+        // Update data barang
+        $barang->update($validated);
 
+        return redirect()->route('master_barang')->with('success', 'Barang berhasil diperbarui!');
+    }
 
     public function hapus($id)
     {

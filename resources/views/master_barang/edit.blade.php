@@ -85,7 +85,7 @@
                         <!-- Input Spesifikasi -->
                         <div class="form-group mb-3">
                             <label for="spesifikasi" class="form-label">Spesifikasi</label>
-                            <textarea id="spesifikasi" name="spesifikasi" class="form-control @error('spesifikasi') is-invalid @enderror">{{ $barang->spesifikasi }}"</textarea>
+                            <textarea id="spesifikasi" name="spesifikasi" class="form-control @error('spesifikasi') is-invalid @enderror">{{ $barang->spesifikasi }}</textarea>
                             @error('spesifikasi')
                                 <div class="text-danger text-sm">{{ $message }}</div>
                             @enderror
