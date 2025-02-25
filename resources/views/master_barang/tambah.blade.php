@@ -108,7 +108,7 @@
 
     <!-- Modal Tambah Kategori -->
     <div class="modal fade" id="tambahKategoriModal" tabindex="-1" aria-labelledby="tambahKategoriModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
                     <h5 class="modal-title text-white" id="tambahKategoriModalLabel">Tambah Kategori Baru</h5>

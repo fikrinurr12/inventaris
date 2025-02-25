@@ -4,43 +4,13 @@
 @section('pages', 'Laporan - Master Barang')
 
 <div class="container-fluid py-4">
-    <div class="card shadow-sm border-0">
-        <div class="card-header bg-primary text-white">
-            <h6 class="mb-0 text-white"><i class="fas fa-filter text-white"></i> Filter Data</h6>
-        </div>
-        <div class="card-body">
-            <form id="filterForm">
-                <div class="row g-3 align-items-end">
-                    <div class="col-md-6">
-                        <div class="mb-2">
-                            <label for="kategori" class="form-label fw-semibold">Kategori</label>
-                            <select name="kategori" id="kategori" class="form-select select-form">
-                                <option value="">-- Pilih Kategori --</option>
-                                @foreach ($kategoriList as $kategori)
-                                    <option value="{{ $kategori->id }}">{{ $kategori->nama }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="mb-2">
-                            <label for="tanggal" class="form-label fw-semibold">Tanggal</label>
-                            <input type="text" name="tanggal" id="tanggal" class="form-control" placeholder="Pilih rentang tanggal">
-                        </div>
-                    </div>
-                </div>  
-                <div class="row">
-                    <div class="col-md-12 text-md-start text-center">
-                        <button type="submit" class="btn btn-primary btn-sm px-4 py-2 mt-2 shadow">
-                            <i class="fas fa-search me-1"></i> Cari
-                        </button>
-                    </div>
-                </div>              
-            </form>
-        </div>
-    </div>    
+    <div>
+        <button class="btn btn-primary btn-md btn-mobile" data-bs-toggle="modal" data-bs-target="#filterModal">
+            <i class="fas fa-filter"></i> Filter
+        </button>
+    </div>
 
-    <div class="card mt-4 shadow-sm">
+    <div class="card shadow-sm">
         <div class="card-body table-responsive">
             <table class="table text-center table-striped table-bordered" id="tabel_laporan">
                 <thead>
@@ -64,11 +34,44 @@
     </div>
 </div>
 
+<!-- Modal Filter -->
+<div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h6 class="modal-title text-white" id="filterModalLabel"><i class="fas fa-filter"></i> Filter Data</h6>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body col-12">
+                <form id="filterForm">
+                    <div class="mb-3">
+                        <label for="kategori" class="form-label fw-semibold">Kategori</label></br>
+                        <select name="kategori" id="kategori" class="form-select select-form" style="width: 100%">
+                            <option value="">-- Pilih Kategori --</option>
+                            @foreach ($kategoriList as $kategori)
+                                <option value="{{ $kategori->id }}">{{ $kategori->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tanggal" class="form-label fw-semibold">Tanggal</label>
+                        <input type="text" name="tanggal" id="tanggal" class="form-control" placeholder="Pilih rentang tanggal">
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <button type="submit" class="btn btn-primary btn-sm btn-mobile"><i class="fas fa-search"></i> Cari</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $(document).ready(function() {
         // Inisialisasi Select2
         $('.select-form').select2({
             theme: 'bootstrap-5',
+            dropdownParent: $('#filterModal'), // Agar select2 muncul dengan benar dalam modal
         });
 
         // Inisialisasi Date Range Picker
@@ -172,6 +175,7 @@
         $('#filterForm').on('submit', function(e) {
             e.preventDefault();
             table.ajax.reload();
+            $('#filterModal').modal('hide'); // Tutup modal setelah filter diterapkan
         });
     });
 </script>
