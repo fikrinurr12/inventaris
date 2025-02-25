@@ -158,8 +158,8 @@ class MasterBarangController extends Controller
             'nama' => 'required|string|max:255|min:2',
             'merk' => 'required|string|max:255|min:2',
             'kategori_id' => 'required|exists:kategoris,id',
-            'spesifikasi' => 'nullable|string|min:6',
-            'keterangan' => 'nullable|string|min:6',
+            'spesifikasi' => 'nullable|string',
+            'keterangan' => 'nullable|string',
             'harga_terakhir' => 'required|numeric',
         ]);
 
