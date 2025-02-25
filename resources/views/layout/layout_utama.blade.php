@@ -5,8 +5,10 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   @php
+    $nonce = base64_encode(random_bytes(16));
     $favicon = request()->isSecure() ? secure_asset('assets/img/logos/Sukun_Mc_Wartono.jpeg') : asset('assets/img/logos/Sukun_Mc_Wartono.jpeg');
   @endphp
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'nonce-{{ $nonce }}' https://cdn.jsdelivr.net https://code.jquery.com https://cdnjs.cloudflare.com https://cdn.datatables.net https://buttons.github.io;">
   <link rel="icon" type="image/png" href="{{ $favicon }}">
   <title>
     @yield('title')
@@ -31,7 +33,7 @@
   <!-- sweetalert -->
   <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
   <!--- sweet alert --->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11" nonce="{{ $nonce }}"></script>
   {{-- select 2 --}}
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   <!-- Select2 Bootstrap 5 Theme -->
@@ -46,7 +48,7 @@
   {{-- daterangepicker css --}}
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.css" />
   {{-- larapex --}}
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts" nonce="{{ $nonce }}"></script>
 
   <style>
     .square-btn {
@@ -186,7 +188,7 @@
 <body class="g-sidenav-show bg-gray-100">
 
   @if (session('success') || session('failed') || session('info') || session('warning') || session('question'))
-    <script>
+    <script nonce="{{ $nonce }}">
         document.addEventListener("DOMContentLoaded", function () {
             Swal.fire({
                 icon: "{{ session('success') ? 'success' : (session('failed') ? 'error' : (session('info') ? 'info' : (session('warning') ? 'warning' : 'question'))) }}",
@@ -457,7 +459,7 @@
       </div>
     </nav>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" nonce="{{ $nonce }}"></script>
     {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/autoNumeric/1.9.46/autoNumeric.min.js"></script> --}}
 
     @stack('scripts_js')
@@ -473,34 +475,34 @@
     $smooth = request()->isSecure() ? secure_asset('assets/js/plugins/smooth-scrollbar.min.js') : asset('assets/js/plugins/smooth-scrollbar.min.js');
     $chart = request()->isSecure() ? secure_asset('assets/js/plugins/chartjs.min.js') : asset('assets/js/plugins/chartjs.min.js');
   @endphp
-  <script src="{{ $popper }}"></script>
-  <script src="{{ $bootstrap }}"></script>
-  <script src="{{ $perfect }}"></script>
-  <script src="{{ $smooth }}"></script>
-  <script src="{{ $chart }}"></script>
+  <script src="{{ $popper }}" nonce="{{ $nonce }}"></script>
+  <script src="{{ $bootstrap }}" nonce="{{ $nonce }}"></script>
+  <script src="{{ $perfect }}" nonce="{{ $nonce }}"></script>
+  <script src="{{ $smooth }}" nonce="{{ $nonce }}"></script>
+  <script src="{{ $chart }}" nonce="{{ $nonce }}"></script>
 
   {{-- datatables js --}}
-  <script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
-  <script src="https://cdn.datatables.net/buttons/3.2.1/js/dataTables.buttons.js"></script>
-  <script src="https://cdn.datatables.net/buttons/3.2.1/js/buttons.dataTables.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
-  <script src="https://cdn.datatables.net/buttons/3.2.1/js/buttons.html5.min.js"></script>
-  <script src="https://cdn.datatables.net/buttons/3.2.1/js/buttons.print.min.js"></script>
+  <script nonce="{{ $nonce }}" src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+  <script nonce="{{ $nonce }}" src="https://cdn.datatables.net/buttons/3.2.1/js/dataTables.buttons.js"></script>
+  <script nonce="{{ $nonce }}" src="https://cdn.datatables.net/buttons/3.2.1/js/buttons.dataTables.js"></script>
+  <script nonce="{{ $nonce }}" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script nonce="{{ $nonce }}" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+  <script nonce="{{ $nonce }}" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+  <script nonce="{{ $nonce }}" src="https://cdn.datatables.net/buttons/3.2.1/js/buttons.html5.min.js"></script>
+  <script nonce="{{ $nonce }}" src="https://cdn.datatables.net/buttons/3.2.1/js/buttons.print.min.js"></script>
   
   {{-- select2 --}}
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js" nonce="{{ $nonce }}"></script>
 
   {{-- date range picker --}}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" nonce="{{ $nonce }}"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/3.0.5/daterangepicker.min.js" nonce="{{ $nonce }}"></script>
 
   {{-- larapex chart --}}
   {{-- <script src="https://cdn.jsdelivr.net/npm/larapex-chart@1.0.4/dist/larapexchart.min.js"></script> --}}
 
   {{-- rupiah format --}}
-  <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4"></script>
+  <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.5.4" nonce="{{ $nonce }}"></script>
 
   <script>
     var win = navigator.platform.indexOf('Win') > -1;
@@ -613,19 +615,15 @@
   {{-- notifikasi pending --}}
 
   <!-- Github buttons -->
-  <script src="https://buttons.github.io/buttons.js"></script>
+  <script src="https://buttons.github.io/buttons.js" nonce="{{ $nonce }}"></script>
 
   <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
   @php
   $dashboardjs = request()->isSecure() ? secure_asset('assets/js/argon-dashboard.min.js?v=2.1.0') : asset('assets/js/argon-dashboard.min.js?v=2.1.0');
-  @endphp
-  <script src="{{ $dashboardjs }}"></script>
-
-  {{-- custom js --}}
-  @php
   $customjs = request()->isSecure() ? secure_asset('assets/js/custom-script.js') : asset('assets/js/custom-script.js');
   @endphp
-  <script src="{{ $customjs }}"></script>
+  <script src="{{ $dashboardjs }}" nonce="{{ $nonce }}"></script>
+  <script src="{{ $customjs }}" nonce="{{ $nonce }}"></script>
   
 </body>
 
