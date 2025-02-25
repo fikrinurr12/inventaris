@@ -186,8 +186,12 @@ class MasterBarangController extends Controller
             }
         
             $validated['foto'] = $uploadResponse->getSecurePath();
+        }else if(!$request->hasFile('foto')){
+            // **Update data barang**
+            $barang->update($validated);
+            return redirect()->route('master_barang')->with('success', 'Barang berhasil diperbarui!');
         }else{
-                return back()->with('failed', 'Gagal mengunggah gambar ke Cloud.');
+            return back()->with('failed', 'Gagal mengunggah gambar ke Cloud.');
         }
 
         // // **Proses update foto jika ada**
@@ -203,11 +207,6 @@ class MasterBarangController extends Controller
         //     $foto->move(public_path('assets/img/upload'), $fotoName);
         //     $validated['foto'] = 'assets/img/upload/' . $fotoName;
         // }
-
-        // **Update data barang**
-        $barang->update($validated);
-
-        return redirect()->route('master_barang')->with('success', 'Barang berhasil diperbarui!');
     }
 
 
