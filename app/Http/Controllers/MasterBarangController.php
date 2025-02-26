@@ -51,6 +51,18 @@ class MasterBarangController extends Controller
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </form>';
+                })->filter(function ($query) use ($request) {
+                    if ($request->search['value']) {
+                        $search = $request->search['value'];
+                        $query->where(function ($q) use ($search) {
+                            $q->where('kode', 'LIKE', "%{$search}%")
+                              ->orWhere('nama', 'LIKE', "%{$search}%")
+                              ->orWhere('merk', 'LIKE', "%{$search}%")
+                              ->orWhereHas('kategori', function ($q) use ($search) {
+                                  $q->where('nama', 'LIKE', "%{$search}%");
+                              });
+                        });
+                    }
                 })
                 ->rawColumns(['keterangan', 'aksi']) // Pastikan kolom tombol ditampilkan sebagai HTML
                 ->make(true);

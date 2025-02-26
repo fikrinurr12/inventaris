@@ -52,12 +52,26 @@ class LaporanController extends Controller
             ->addColumn('kategori', function ($dataBarang) {
                 return $dataBarang->kategori ? $dataBarang->kategori->nama : '-';
             })
-            ->editColumn('created_at', function ($dataBarang) {
-                return $dataBarang->created_at ? $dataBarang->created_at->format('d-m-Y') : '-';
+            ->editColumn('updated_at', function ($dataBarang) {
+                return $dataBarang->updated_at ? $dataBarang->updated_at->format('d-m-Y') : '-';
             })
             ->editColumn('harga_terakhir', function ($dataBarang) {
                 return 'Rp ' . number_format($dataBarang->harga_terakhir, 0, ',', '.');
-            })            
+            })->filter(function ($query) use ($request) {
+                if ($request->search['value']) {
+                    $search = $request->search['value'];
+                    $query->where(function ($q) use ($search) {
+                        $q->where('kode', 'LIKE', "%{$search}%")
+                          ->orWhere('nama', 'LIKE', "%{$search}%")
+                          ->orWhere('updated_at', 'LIKE', "%{$search}%")
+                          ->orWhere('harga_terakhir', 'LIKE', "%{$search}%")
+                          ->orWhere('merk', 'LIKE', "%{$search}%")
+                          ->orWhereHas('kategori', function ($q) use ($search) {
+                              $q->where('nama', 'LIKE', "%{$search}%");
+                          });
+                    });
+                }
+            })          
             ->rawColumns(['kategori'])
             ->toJson();
     }
@@ -109,6 +123,25 @@ class LaporanController extends Controller
             })
             ->editColumn('harga', function ($pembelian) {
                 return 'Rp ' . number_format($pembelian->harga, 0, ',', '.');
+            })->filter(function ($query) use ($request) {
+                if ($request->search['value']) {
+                    $search = $request->search['value'];
+                    $query->where(function ($q) use ($search) {
+                        $q->where('no_transaksi', 'LIKE', "%{$search}%")
+                          ->orWhere('tgl_transaksi', 'LIKE', "%{$search}%")
+                          ->orWhere('no_invoice', 'LIKE', "%{$search}%")
+                          ->orWhere('harga', 'LIKE', "%{$search}%")
+                          ->orWhere('keterangan', 'LIKE', "%{$search}%")
+                          ->orWhereHas('barang', function ($q) use ($search) {
+                              $q->where('kode', 'LIKE', "%{$search}%")
+                                ->where('harga_terakhir', 'LIKE', "%{$search}%")
+                                ->orWhere('nama', 'LIKE', "%{$search}%");
+                          })
+                          ->orWhereHas('supplier', function ($q) use ($search) {
+                              $q->where('nama', 'LIKE', "%{$search}%");
+                          });
+                    });
+                }
             })
             ->rawColumns(['nama_barang','nama_supplier'])
             ->toJson();
@@ -149,6 +182,18 @@ class LaporanController extends Controller
             })
             ->editColumn('created_at', function ($penyesuaian) {
                 return Carbon::parse($penyesuaian->created_at)->format('d-m-Y');
+            })->filter(function ($query) use ($request) {
+                if ($request->search['value']) {
+                    $search = $request->search['value'];
+                    $query->where(function ($q) use ($search) {
+                        $q->where('keterangan', 'LIKE', "%{$search}%")
+                          ->orWhere('no_transaksi', 'LIKE', "%{$search}%")
+                          ->orWhereHas('barang', function ($q) use ($search) {
+                              $q->where('kode', 'LIKE', "%{$search}%")
+                                ->orWhere('nama', 'LIKE', "%{$search}%");
+                          });
+                    });
+                }
             })
             ->rawColumns(['nama_barang'])
             ->toJson();
@@ -163,7 +208,7 @@ class LaporanController extends Controller
 
     public function getDataPeminjaman(Request $request)
     {
-        $query = Peminjaman::with('barang')->orderBy('created_at', 'desc');
+        $query = Peminjaman::with('barang.kategori')->orderBy('created_at', 'desc');
 
         // Filter berdasarkan rentang tanggal transaksi (tgl_peminjaman)
         if ($request->filled('tanggal')) {
@@ -203,6 +248,26 @@ class LaporanController extends Controller
             })
             ->editColumn('tgl_peminjaman', function ($peminjaman) {
                 return Carbon::parse($peminjaman->tgl_peminjaman)->format('d-m-Y');
+            })->filter(function ($query) use ($request) {
+                if (!empty($request->search['value'])) {
+                    $search = $request->search['value'];
+                    $query->where(function ($q) use ($search) {
+                        $q->where('no_transaksi', 'LIKE', "%{$search}%")
+                          ->orWhere('tgl_peminjaman', 'LIKE', "%{$search}%")
+                          ->orWhere('keterangan', 'LIKE', "%{$search}%")
+                          ->orWhere('jumlah', 'LIKE', "%{$search}%")
+                          ->orWhere('sisa_pinjam', 'LIKE', "%{$search}%")
+                          ->orWhereHas('user', function ($q) use ($search) {
+                              $q->where('name', 'LIKE', "%{$search}%");
+                          })
+                          ->orWhereHas('barang', function ($q) use ($search) {
+                              $q->where('nama', 'LIKE', "%{$search}%");
+                          })
+                          ->orWhereHas('barang.kategori', function ($q) use ($search) {
+                              $q->where('nama', 'LIKE', "%{$search}%");
+                          });
+                    });
+                }
             })
             ->rawColumns(['nama_barang'])
             ->toJson();
@@ -217,7 +282,7 @@ class LaporanController extends Controller
 
     public function getDataPengembalian(Request $request)
     {
-        $query = Pengembalian::with('barang')->orderBy('created_at', 'desc');
+        $query = Pengembalian::with('barang.kategori')->orderBy('created_at', 'desc');
 
         // Filter berdasarkan rentang tanggal transaksi (tgl_peminjaman)
         if ($request->filled('tanggal')) {
@@ -257,6 +322,26 @@ class LaporanController extends Controller
             })
             ->editColumn('tgl_pengembalian', function ($pengembalian) {
                 return Carbon::parse($pengembalian->tgl_pengembalian)->format('d-m-Y');
+            })->filter(function ($query) use ($request) {
+                if ($request->search['value']) {
+                    $search = $request->search['value'];
+                    $query->where(function ($q) use ($search) {
+                        $q->where('no_transaksi', 'LIKE', "%{$search}%")
+                          ->orWhere('tgl_pengembalian', 'LIKE', "%{$search}%")
+                          ->orWhere('keterangan', 'LIKE', "%{$search}%")
+                          ->orWhere('jumlah', 'LIKE', "%{$search}%")
+                          ->orWhere('sisa_pinjam', 'LIKE', "%{$search}%")
+                          ->orWhereHas('user', function ($q) use ($search) {
+                              $q->where('name', 'LIKE', "%{$search}%");
+                          })
+                          ->orWhereHas('barang', function ($q) use ($search) {
+                              $q->where('nama', 'LIKE', "%{$search}%");
+                          })
+                          ->orWhereHas('barang.kategori', function ($q) use ($search) {
+                            $q->where('nama', 'LIKE', "%{$search}%");
+                        });
+                    });
+                }
             })
             ->rawColumns(['nama_barang'])
             ->toJson();

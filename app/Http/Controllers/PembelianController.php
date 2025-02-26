@@ -51,6 +51,24 @@ class PembelianController extends Controller
                     }
 
                     return $buttons;
+                })->filter(function ($query) use ($request) {
+                    if ($request->search['value']) {
+                        $search = $request->search['value'];
+                        $query->where(function ($q) use ($search) {
+                            $q->where('no_transaksi', 'LIKE', "%{$search}%")
+                              ->orWhere('tgl_transaksi', 'LIKE', "%{$search}%")
+                              ->orWhere('no_invoice', 'LIKE', "%{$search}%")
+                              ->orWhere('harga', 'LIKE', "%{$search}%")
+                              ->orWhere('keterangan', 'LIKE', "%{$search}%")
+                              ->orWhereHas('barang', function ($q) use ($search) {
+                                  $q->where('kode', 'LIKE', "%{$search}%")
+                                    ->orWhere('nama', 'LIKE', "%{$search}%");
+                              })
+                              ->orWhereHas('supplier', function ($q) use ($search) {
+                                  $q->where('nama', 'LIKE', "%{$search}%");
+                              });
+                        });
+                    }
                 })
                 ->rawColumns(['aksi'])
                 ->make(true);

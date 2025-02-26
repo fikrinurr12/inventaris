@@ -68,6 +68,26 @@ class PengembalianController extends Controller
                     }
 
                     return $buttons;
+                })->filter(function ($query) use ($request) {
+                    if ($request->search['value']) {
+                        $search = $request->search['value'];
+                        $query->where(function ($q) use ($search) {
+                            $q->where('no_transaksi', 'LIKE', "%{$search}%")
+                              ->orWhere('tgl_pengembalian', 'LIKE', "%{$search}%")
+                              ->orWhere('keterangan', 'LIKE', "%{$search}%")
+                              ->orWhere('jumlah', 'LIKE', "%{$search}%")
+                              ->orWhere('sisa_pinjam', 'LIKE', "%{$search}%")
+                              ->orWhereHas('user', function ($q) use ($search) {
+                                  $q->where('name', 'LIKE', "%{$search}%");
+                              })
+                              ->orWhereHas('barang', function ($q) use ($search) {
+                                  $q->where('nama', 'LIKE', "%{$search}%");
+                              })
+                              ->orWhereHas('peminjaman', function ($q) use ($search) {
+                                  $q->where('no_transaksi', 'LIKE', "%{$search}%");
+                              });
+                        });
+                    }
                 })
                 ->rawColumns(['aksi'])
                 ->make(true);

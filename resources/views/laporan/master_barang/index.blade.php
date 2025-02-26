@@ -148,7 +148,7 @@
                 { data: 'stok_total_baik', name: 'stok_total_baik' },
                 { data: 'stok_total_rusak', name: 'stok_total_rusak' },
                 { data: 'stok_tersedia', name: 'stok_tersedia' },
-                { data: 'created_at', name: 'created_at' }
+                { data: 'updated_at', name: 'updated_at' }
             ],
             createdRow: function (row, data, dataIndex) {
                 $(row).find('td').addClass('text-sm').addClass('text-center');

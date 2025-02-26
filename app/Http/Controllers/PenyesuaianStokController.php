@@ -32,6 +32,18 @@ class PenyesuaianStokController extends Controller
                     return '<a href="'.$printUrl.'" class="btn btn-sm btn-success square-btn">
                             <i class="fas fa-print"></i>
                         </a>';
+                })->filter(function ($query) use ($request) {
+                    if ($request->search['value']) {
+                        $search = $request->search['value'];
+                        $query->where(function ($q) use ($search) {
+                            $q->where('keterangan', 'LIKE', "%{$search}%")
+                              ->orWhere('no_transaksi', 'LIKE', "%{$search}%")
+                              ->orWhereHas('barang', function ($q) use ($search) {
+                                  $q->where('kode', 'LIKE', "%{$search}%")
+                                    ->orWhere('nama', 'LIKE', "%{$search}%");
+                              });
+                        });
+                    }
                 })
                 ->rawColumns(['kode_barang', 'nama_barang', 'keterangan', 'aksi'])
                 ->make(true);

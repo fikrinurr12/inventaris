@@ -46,8 +46,8 @@ $(document).ready( function () {
             { data: 'kode', name: 'kode', className: 'text-sm' },
             { data: 'nama', name: 'nama', className: 'text-sm' },
             { data: 'merk', name: 'merk', className: 'text-sm' },
-            { data: 'kategori', name: 'kategori', orderable: false, searchable: false, className: 'text-sm' },
-            { data: 'keterangan', name: 'keterangan', orderable: false, searchable: false, className: 'text-sm' },
+            { data: 'kategori', name: 'kategori', className: 'text-sm' },
+            { data: 'keterangan', name: 'keterangan', className: 'text-sm' },
             { data: 'aksi', name: 'aksi', orderable: false, searchable: false, className: 'text-sm' }
         ],
         createdRow: function (row, data, dataIndex) {
