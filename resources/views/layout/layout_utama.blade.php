@@ -438,7 +438,8 @@
                 data-bs-toggle="dropdown" 
                 aria-expanded="false"
                 data-bs-offset="0,10"> <!-- Menggeser dropdown lebih dekat ke navbar -->
-                  <span class="d-none d-sm-inline">{{ Auth::user()->name }}</span>
+                  <span class="d-none d-sm-inline">{{ Auth::user()->name }}</span></br>
+                  <span class="nav-link-text ms-1">({{ auth()->user()->roles->first()->name ?? 'Tidak Ada Role' }})</span>
               </a>
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
                 <li>

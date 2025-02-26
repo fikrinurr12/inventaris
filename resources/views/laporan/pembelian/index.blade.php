@@ -34,7 +34,7 @@
 
 <!-- Modal Filter -->
 <div class="modal fade" id="filterModal" tabindex="-1" aria-labelledby="filterModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
                 <h6 class="modal-title text-white" id="filterModalLabel"><i class="fas fa-filter"></i> Filter Data</h6>
